@@ -24,8 +24,11 @@ int s21_the_matrix_sizer(int rows, int columns, matrix_t *result) {
     result->matrix[i] = (double *)calloc(columns, sizeof(double));
     if (result->matrix[i] == NULL) {
       flag = FAILURE;
-      result->rows = i;
-      s21_remove_matrix(result);
+      if (i != 0) {
+        result->rows = i;
+        s21_remove_matrix(result);
+      } else
+        free(result->matrix);
     }
   }
   return flag;
@@ -33,7 +36,7 @@ int s21_the_matrix_sizer(int rows, int columns, matrix_t *result) {
 
 void s21_remove_matrix(matrix_t *A) {
   if (A != NULL) {
-    if (A->matrix != NULL) {
+    if (A->matrix != NULL && A->rows > 0) {
       for (int i = 0; i < (A->rows); i++) {
         if (A->matrix[i] != NULL) free(A->matrix[i]);
       }
@@ -393,20 +396,3 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   }
   return flag;
 }
-
-/* Extra functions:
-  // (ノ ◑‿◑)ノ (I'm filling the matrix with elements from the array and I won't
-  fill "+/-nan" and "+/-inf") int filling_matrix_safer(matrix_t *mtrx, double*
-  array){ if(!s21_if_matrix_legit(mtrx)|| !s21_if_matrix_rows_legit(mtrx) ||
-  array==NULL) return INPUT_ERR; int flag=SUCCESS_CALC; for(int
-  i=0,k=0;flag==SUCCESS_CALC && i<mtrx->rows;i++){ for(int
-  j=0;flag==SUCCESS_CALC
-  && j<mtrx->columns;j++,k++){ if(s21_if_double_legit(array[k]))
-          mtrx->matrix[i][j]=array[k];
-        else
-          flag=INPUT_ERR;
-      }
-    }
-    return flag;
-  }
-*/

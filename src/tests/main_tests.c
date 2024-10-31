@@ -4,13 +4,6 @@
 
 #include "../s21_matrix.h"
 // elevator    begining
-/* werror
-START_TEST(test_m_legit_1_1) {
-  matrix_t* matrix_1;
-  int output=0, check=0;
-  output=s21_if_matrix_legit(matrix_1);
-  ck_assert_int_eq(output,check);
-}*/
 START_TEST(test_m_legit_1_2) {
   const matrix_t *matrix_1 = NULL;
   int output = 0, check = 0;
@@ -2708,27 +2701,6 @@ START_TEST(test_m_inverse_m_12) {
   s21_remove_matrix(&result);
   s21_remove_matrix(&check_m);
 }
-/*START_TEST(test_m_inverse_m_13){ //too big ==> too slow
-  matrix_t matrx_1, result, check_m;
-  int rows=10, columns=10;
-  int check=0;
-  double arr[110];
-
-  for(int i=0, k=0;i<rows;i++){
-    for(int j=0;j<columns;j++,k++){
-      if(i==j)  arr[k]=1;
-      else arr[k]=0;
-    }
-  }
-  ck_assert_int_eq(s21_matrix_builder(rows,columns,&matrx_1, arr),check);
-  ck_assert_int_eq(s21_inverse_matrix(&matrx_1,&result),check);
-  ck_assert_int_eq(s21_matrix_builder(rows,columns,&check_m, arr),check);
-  check=1;
-  ck_assert_int_eq(s21_eq_matrix(&result,&check_m),check);
-  s21_remove_matrix(&matrx_1);
-  s21_remove_matrix(&result);
-  s21_remove_matrix(&check_m);
-}*/
 START_TEST(test_m_inverse_m_14) {
   matrix_t matrx_1, result, check_m;
   int rows = 1, columns = 1;
@@ -2902,7 +2874,6 @@ void test_block_1(SRunner *sr) {
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase(s, tc_core);
 
-  // tcase_add_test(tc_core, test_m_legit_1_1);
   tcase_add_test(tc_core, test_m_legit_1_2);
   tcase_add_test(tc_core, test_m_legit_1_4);
   tcase_add_test(tc_core, test_m_legit_1_5);
@@ -3050,7 +3021,6 @@ void test_block_2(SRunner *sr) {
   tcase_add_test(tc_core, test_m_inverse_m_10);
   tcase_add_test(tc_core, test_m_inverse_m_11);
   tcase_add_test(tc_core, test_m_inverse_m_12);
-  // tcase_add_test(tc_core, test_m_inverse_m_13);
   tcase_add_test(tc_core, test_m_inverse_m_14);
   tcase_add_test(tc_core, test_m_inverse_m_15);
 

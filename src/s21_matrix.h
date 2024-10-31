@@ -54,8 +54,7 @@ int s21_matrix_builder(int rows, int columns, matrix_t *result,
 int s21_matrix_rebuilder(int rows, int columns, matrix_t *result,
                          const double *array);
 
-double s21_determinant_recursive(
-    matrix_t A);  // tests indicate some problems with precision
+double s21_determinant_recursive(matrix_t A);
 int s21_minor_maker(matrix_t *A, int row, int column, matrix_t *result);
 int s21_minor_maker_complex(matrix_t *A, int row, int column, matrix_t *result);
 
@@ -73,9 +72,7 @@ int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result);
 
 // Matrix nature functions
 int s21_transpose(matrix_t *A, matrix_t *result);
-int s21_determinant(
-    matrix_t *A,
-    double *result);  // tests indicate some problems with precision
+int s21_determinant(matrix_t *A, double *result);
 int s21_calc_complements(matrix_t *A, matrix_t *result);
 int s21_inverse_matrix(matrix_t *A, matrix_t *result);
 
