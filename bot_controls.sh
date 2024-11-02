@@ -2,7 +2,7 @@
 VAR_file="src/VAR.txt"
 VAR_comment=$(cat $VAR_file)
 VAR_bot_api_token=""
-VAR_bot_chat_ID="674755190"
+VAR_bot_chat_ID=""
 # https://api.telegram.org/bot$VAR_bot_api_token/getme - bot info
 # https://api.telegram.org/bot$VAR_bot_api_token/getupdates  - log
 VAR_message_URL="https://api.telegram.org/bot$VAR_bot_api_token/sendMessage"
