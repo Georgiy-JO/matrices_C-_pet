@@ -21,9 +21,9 @@ jobs:
           if ! git diff --quiet; then
             exit 1
           fi
-      # - name: Sending bot message
-      #   uses: ./.github/actions/bot_messaging
-      #   continue-on-error: true
+      - name: Sending bot message
+        uses: ./.github/actions/bot_messaging
+        continue-on-error: true
     continue-on-error: true
 
   format-check-tests:
@@ -39,9 +39,9 @@ jobs:
           if ! git diff --quiet; then
             exit 1
           fi
-      # - name: Sending bot message
-      #   uses: ./.github/actions/bot_messaging
-      #   continue-on-error: true
+      - name: Sending bot message
+        uses: ./.github/actions/bot_messaging
+        continue-on-error: true
     continue-on-error: true
 
 
