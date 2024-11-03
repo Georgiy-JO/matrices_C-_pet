@@ -14,8 +14,7 @@ int s21_create_matrix(int rows, int columns, matrix_t *result) {
 
 // (ノ ◑‿◑)ノ (I'm filling the sizes of the matrix and allocating place)
 // never been checked independently
-int s21_the_matrix_sizer(int rows, int columns, matrix_t *result) 
-
+int s21_the_matrix_sizer(int rows, int columns, matrix_t *result)
 
 {
   int flag = SUCCESS;
@@ -40,7 +39,9 @@ int s21_the_matrix_sizer(int rows, int columns, matrix_t *result)
 void s21_remove_matrix(matrix_t *A) {
   if (A != NULL) {
     if (A->matrix != NULL && A->rows > 0) {
-      for (int i = 0; i < (A->rows); i++) {        if (A->matrix[i] != NULL) free(A->matrix[i]);      }
+      for (int i = 0; i < (A->rows); i++) {
+        if (A->matrix[i] != NULL) free(A->matrix[i]);
+      }
       free(A->matrix);
       A->matrix = NULL;
     }
@@ -52,7 +53,10 @@ void s21_remove_matrix(matrix_t *A) {
 // Service functions ------------------------------------------------
 // (ノ ◑‿◑)ノ (I'm checking if the matrix is alright. I'm not too precise.)
 int s21_if_matrix_legit(const matrix_t *matr) {
-  return (matr == NULL || matr->rows <= 0 || matr->columns <= 0 ||          matr->matrix == NULL)             ? FAILURE             : SUCCESS;
+  return (matr == NULL || matr->rows <= 0 || matr->columns <= 0 ||
+          matr->matrix == NULL)
+             ? FAILURE
+             : SUCCESS;
 }
 
 // (ノ ◑‿◑)ノ (I'm checking if all the matrix's elements are alright)
