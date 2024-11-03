@@ -28,6 +28,7 @@ jobs:
         with:
           bot_url: ${{ secrets.BOT_GLADOS_URL }}
           bot_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
         continue-on-error: true
 
     continue-on-error: true

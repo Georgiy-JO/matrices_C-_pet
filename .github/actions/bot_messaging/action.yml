@@ -8,6 +8,9 @@ inputs:
   bot_id:
     description: 'Telegram chat ID (JO_CHAT_ID)'
     required: true
+  job_status:
+    description: 'Stores the status of the job'
+    required: true
 
 runs:
   using: 'composite'
@@ -24,7 +27,7 @@ runs:
       env:
         BOT_GLADOS_URL: ${{ inputs.bot_url }}
         JO_CHAT_ID: ${{ inputs.bot_id }}
-        JOB_STATUS: ${{ job.status }}
+        JOB_STATUS: ${{ inputs.job_status }}
       run: sh ./.github/bot_controls.sh
 
 # Comment required jobs: 
