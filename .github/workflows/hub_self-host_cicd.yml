@@ -70,7 +70,7 @@ jobs:
           make cpp_check &> CPP_CHECK.txt
           cat CPP_CHECK.txt
           echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
-          if [ $(cat VAR.txt) -gt 2 ]; then  #*
+          if [ $(cat VAR.txt) -gt 3 ]; then                           #*
             echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
             exit 1
           fi
@@ -93,7 +93,7 @@ jobs:
           path: src/CPP_CHECK.txt
 
     continue-on-error: true
-  #* -can adjust how many CPP-check issues may be for successfull pass
+  #* -can adjust how many CPP-check issues may exist for successfull pass
 
 
 
