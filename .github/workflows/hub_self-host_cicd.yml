@@ -40,6 +40,9 @@ jobs:
             exit 1
           fi
       - name: Sending bot message
+        with:
+          bot_url: ${{ secrets.BOT_GLADOS_URL }}
+          bot_id: ${{ secrets.JO_CHAT_ID }}
         uses: ./.github/actions/bot_messaging
         continue-on-error: true
     continue-on-error: true

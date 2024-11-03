@@ -13,10 +13,10 @@ runs:
     - name: Sending message
       shell: bash
       env:
-        BOT_GLADOS_URL: ${{ secrets.BOT_GLADOS_URL }}
-        JO_CHAT_ID: ${{ secrets.JO_CHAT_ID }}
+        BOT_GLADOS_URL: ${{ inputs.bot_url }}
+        JO_CHAT_ID: ${{ inputs.bot_id }}
         JOB_STATUS: ${{ job.status }}
-      run: sh ./bot_controls.sh
+      run: sh ./.github/bot_controls.sh
 
 # Comment required jobs: 
 #     cpp-check, 
