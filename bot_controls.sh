@@ -1,4 +1,4 @@
-#!/bit/bash 
+#!/bin/bash 
 VAR_file="src/VAR.txt"
 VAR_comment=$(cat $VAR_file)
 VAR_bot_api_token="${{ secrets.BOT_GLADOS_URL }}"
