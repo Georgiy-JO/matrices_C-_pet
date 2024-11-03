@@ -1,4 +1,4 @@
-name: 'Bot message'
+name: 'bot_messaging'
 description: 'This action sends CICD job and step info via telegram bot.'
 runs:
   using: 'composite'

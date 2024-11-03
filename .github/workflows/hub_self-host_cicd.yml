@@ -24,7 +24,8 @@ jobs:
         continue-on-error: true
 
       - name: Sending bot message
-        uses: ./.github/actions/bot_messaging.yml
+        uses: ./.github/actions/action
+        continue-on-error: true
 
 
       - name: Checking code style of test files
@@ -38,7 +39,8 @@ jobs:
         continue-on-error: true
 
       - name: Sending bot message
-        uses: ./.github/actions/bot_messaging.yml
+        uses: ./.github/actions/action
+        continue-on-error: true
 
 
 
