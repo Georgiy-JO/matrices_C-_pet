@@ -195,7 +195,6 @@ jobs:
           retention-days: 5  
 
 
-
   gcovr-job:
     runs-on: self-hosted
     needs: [building-lib-job, testing-job]
@@ -235,6 +234,50 @@ jobs:
 #* -can adjust how many % of lines may be not covered for successfull pass
           
 
+  clean-test-job:
+    runs-on: self-hosted
+    needs: [building-lib-job, testing-job, gcovr-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checking cleaning abilities
+        run: |
+          cd src
+          make s21_matrix.a
+          make clean
+          if ! git diff --quiet; then
+            echo "| library st cleaning error" > VAR.txt
+            exit 1
+          fi
+          make all
+          make clean
+          if ! git diff --quiet; then
+            echo "| all st cleaning error" > VAR.txt
+            exit 1
+          fi
+          make test
+          make clean
+          if ! git diff --quiet; then
+            echo "| test st cleaning error" > VAR.txt
+            exit 1
+          fi
+          make gcov_report
+          make clean
+          if ! git diff --quiet; then
+            echo "| gcov st cleaning error" > VAR.txt
+            exit 1
+          fi
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_url: ${{ secrets.BOT_GLADOS_URL }}
+          bot_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+    
+    continue-on-error: true
 
 
 
