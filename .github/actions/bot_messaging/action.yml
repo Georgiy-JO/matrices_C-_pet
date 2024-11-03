@@ -13,8 +13,8 @@ runs:
     - name: Sending message
       shell: bash
       env:
-        BOT_GLADOS_URL: BOT_GLADOS_URL
-        JO_CHAT_ID: JO_CHAT_ID
+        BOT_GLADOS_URL: $BOT_GLADOS_URL
+        JO_CHAT_ID: $JO_CHAT_ID
         JOB_STATUS: ${{ job.status }}
       run: sh ./bot_controls.sh
 
