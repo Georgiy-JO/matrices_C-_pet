@@ -22,7 +22,7 @@ runs:
     - name: Sending message
       shell: bash
       env:
-        BOT_GLADOS_URL: ${{ inputs.bot_token }}
+        BOT_URL_API_TOKEN: ${{ inputs.bot_token }}
         CHAT_ID: ${{ inputs.chat_id }}
         JOB_STATUS: ${{ inputs.job_status }}
       run: sh ./.github/bot_controls.sh

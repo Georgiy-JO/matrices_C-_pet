@@ -1,7 +1,7 @@
 #!/bin/bash 
 VAR_file="src/VAR.txt"
 VAR_comment=$(cat $VAR_file)
-VAR_bot_api_token=$BOT_GLADOS_URL
+VAR_bot_api_token=$BOT_URL_API_TOKEN
 VAR_bot_chat_ID=$CHAT_ID
 VAR_JOB_STATUS=$JOB_STATUS
 VAR_PROJECT=${GITHUB_REPOSITORY##*/}
