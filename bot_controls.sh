@@ -1,8 +1,9 @@
 #!/bin/bash 
 VAR_file="src/VAR.txt"
 VAR_comment=$(cat $VAR_file)
-VAR_bot_api_token="${{ secrets.BOT_GLADOS_URL }}"
-VAR_bot_chat_ID="${{ secrets.JO_CHAT_ID }}"
+VAR_bot_api_token=$BOT_GLADOS_URL
+VAR_bot_chat_ID=$JO_CHAT_ID
+VAR_JOB_STATUS=$JOB_STATUS
 # https://api.telegram.org/bot$VAR_bot_api_token/getme - bot info
 # https://api.telegram.org/bot$VAR_bot_api_token/getupdates  - log
 VAR_message_URL="https://api.telegram.org/bot$VAR_bot_api_token/sendMessage"
@@ -17,9 +18,9 @@ echo "Sending message to the bot!"
 
 # VAR_message="$GITHUB_TRIGGERING_ACTOR|$GITHUB_REPOSITORY|$GITHUB_JOB->"
 VAR_message="$GITHUB_REPOSITORY|$GITHUB_JOB->"
-if [ "${{ job.status }}" = "success" ]; then      #✅ - succeed
+if [ "$VAR_JOB_STATUS" = "success" ]; then      #✅ - succeed
     VAR_message="$VAR_message✅$VAR_comment"
-elif [ "${{ job.status }}" = "failed" ]; then     #❎ - failed
+elif [ "$VAR_JOB_STATUS" = "failed" ]; then     #❎ - failed
     VAR_message="$VAR_message❌$VAR_comment"
 else                                           #🛑 - canceled
     VAR_message="$VAR_message🛑$VAR_comment"
