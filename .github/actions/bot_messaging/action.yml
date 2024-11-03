@@ -18,4 +18,5 @@ runs:
 #     gcovr-job(COVERAGE), 
 #     clean-test-job(EXTRA).
 # Comment free jobs: 
-#     format-check.     
+#     format-check-main,
+#     format-check-tests.     
