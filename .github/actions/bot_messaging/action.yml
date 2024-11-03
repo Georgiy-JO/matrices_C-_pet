@@ -4,7 +4,7 @@ runs:
   using: 'composite'
   steps:
     - run: |
-      if [ $CI_JOB_NAME == "format-check-main" ] || [ $CI_JOB_NAME == "format-check-test" ]; then 
+      if [ "$GITHUB_JOB" == "format-check-main" ] || [ "$GITHUB_JOB" == "format-check-tests" ]; then 
       echo "" > src/VAR.txt
       fi
       sh ./bot_controls.sh
