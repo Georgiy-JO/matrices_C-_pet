@@ -23,6 +23,7 @@ jobs:
           fi
 
       - name: Sending bot message
+        if: always()
         uses: ./.github/actions/bot_messaging
         with:
           bot_url: ${{ secrets.BOT_GLADOS_URL }}
