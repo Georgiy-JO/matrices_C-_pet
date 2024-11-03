@@ -3,11 +3,16 @@ description: 'This action sends CICD job and step info via telegram bot.'
 runs:
   using: 'composite'
   steps:
-    - run: |
+    - name: Creating empty comment file
+      shell: bash
+      run: |
         if [ "$GITHUB_JOB" == "format-check-main" ] || [ "$GITHUB_JOB" == "format-check-tests" ]; then 
           echo "" > src/VAR.txt
         fi
-        sh ./bot_controls.sh
+
+    - name: Sending message
+      shell: bash
+      run: sh ./bot_controls.sh
 
 # Comment required jobs: 
 #     cpp-check, 
