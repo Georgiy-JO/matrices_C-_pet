@@ -16,12 +16,12 @@ if [ -z "$VAR_bot_api_token" ] || [ -z "$VAR_bot_chat_ID" ]; then
 fi
 
 echo "Sending message to the bot!"
-echo $VAR_JOB_STATUS
+
 # VAR_message="$GITHUB_TRIGGERING_ACTOR|$VAR_PROJECT|$GITHUB_JOB->"
 VAR_message="$VAR_PROJECT|$GITHUB_JOB->"
 if [ "$VAR_JOB_STATUS" = "success" ]; then      #✅ - succeed
     VAR_message="$VAR_message✅$VAR_comment"
-elif [ "$VAR_JOB_STATUS" = "failed" ]; then     #❎ - failed
+elif [ "$VAR_JOB_STATUS" = "failure" ]; then     #❎ - failed
     VAR_message="$VAR_message❌$VAR_comment"
 else                                           #🛑 - canceled
     VAR_message="$VAR_message🛑$VAR_comment"
