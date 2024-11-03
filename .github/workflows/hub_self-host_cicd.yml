@@ -24,7 +24,7 @@ jobs:
         continue-on-error: true
 
       - name: Sending bot message
-        uses: ./.github/actions/action
+        uses: ./.github/actions/bot_messaging
         continue-on-error: true
 
 
@@ -39,7 +39,7 @@ jobs:
         continue-on-error: true
 
       - name: Sending bot message
-        uses: ./.github/actions/action
+        uses: ./.github/actions/bot_messaging
         continue-on-error: true
 
 
