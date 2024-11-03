@@ -44,29 +44,6 @@ verter-check:
 
 
 
-gcovr-job:
-  stage: coverage
-  script:
-    - cd src
-    - make gcov_report > TEMP_COV.txt
-    - cat TEMP_COV.txt
-    - grep -oP "Lines executed:\K[0-9]+" TEMP_COV.txt | grep -oP "[0-9]+" | tail -1 > VAR.txt
-    - if [ $(grep . VAR.txt) -lt 95 ]; then #*
-    -   echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
-    -   exit 1
-    - fi
-    - echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
-  needs:
-    - building-job-lib
-    - testing-job
-  artifacts:
-    when: always
-    paths:
-      - build/coverage
-    expire_in: 5 days
-  allow_failure: true
-#* -can adjust how many % of lines may be not covered for successfull pass
-
 
 clean-test-job:
   stage: extra

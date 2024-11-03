@@ -72,7 +72,7 @@ jobs:
           make cpp_check &> CPP_CHECK.txt
           cat CPP_CHECK.txt
           echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
-          if [ $(cat VAR.txt) -gt 3 ]; then                           #*
+          if [ $(cat VAR.txt) -gt 3 ]; then                                                   #*
             echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
             exit 1
           fi
@@ -167,7 +167,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name:
+      - name: Runing tests
         run: |
           cd src
           make test > RESULT_TEST.txt
@@ -194,6 +194,46 @@ jobs:
           path: src/RESULT_TEST.txt
           retention-days: 5  
 
+
+
+  gcovr-job:
+    runs-on: self-hosted
+    needs: [building-lib-job, testing-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checking coverage of code with tests and creating coverage report 
+        run: |
+          cd src
+          make gcov_report > TEMP_COV.txt
+          cat TEMP_COV.txt
+          grep -oP "Lines executed:\K[0-9]+" TEMP_COV.txt | grep -oP "[0-9]+" | tail -1 > VAR.txt
+          if [ $(grep . VAR.txt) -lt 95 ]; then                                               #*
+            echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
+            exit 1
+          fi
+          echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_url: ${{ secrets.BOT_GLADOS_URL }}
+          bot_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+  
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: build/coverage
+          retention-days: 5  
+
+    continue-on-error: true
+#* -can adjust how many % of lines may be not covered for successfull pass
+          
 
 
 
