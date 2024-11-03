@@ -21,7 +21,6 @@ jobs:
           if ! git diff --quiet; then
             exit 1
           fi
-        continue-on-error: true
 
       - name: Sending bot message
         uses: ./.github/actions/bot_messaging
