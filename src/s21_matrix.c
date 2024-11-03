@@ -52,8 +52,7 @@ void s21_remove_matrix(matrix_t *A) {
 
 // Service functions ------------------------------------------------
 // (ノ ◑‿◑)ノ (I'm checking if the matrix is alright. I'm not too precise.)
-int s21_if_matrix_legit(const matrix_t *matr) {
-  return (matr == NULL || matr->rows <= 0 || matr->columns <= 0 ||
+int s21_if_matrix_legit(const matrix_t *matr) {  return (matr == NULL || matr->rows <= 0 || matr->columns <= 0 ||
           matr->matrix == NULL)
              ? FAILURE
              : SUCCESS;
