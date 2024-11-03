@@ -1,5 +1,14 @@
 name: 'Bot messaging'
 description: 'This action sends CICD job and step info via telegram bot.'
+
+inputs:
+  bot_url:
+    description: 'Telegram bot API token for url (BOT_GLADOS_URL)'
+    required: true
+  bot_id:
+    description: 'Telegram chat ID (JO_CHAT_ID)'
+    required: true
+
 runs:
   using: 'composite'
   steps:
