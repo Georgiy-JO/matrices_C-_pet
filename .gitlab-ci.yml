@@ -12,26 +12,7 @@ stages:
 
 
 
-valgrind-check:
-  stage: post-test
-  script:
-    - cd src
-    - make valgrind_me
-    - grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" RESULT_VALGRIND.txt > VAR.txt
-    - if [ $(grep -oP "[0-9]+" VAR.txt) -ne 0 ]; then 
-    -   echo "| $(grep . VAR.txt) error(s)" > VAR.txt
-    -   exit 1
-    - fi
-    - echo "" > VAR.txt
-  artifacts:
-    when: always
-    paths:
-      - src/RESULT_VALGRIND.txt
-    expire_in: 5 days
-  needs:
-    - building-job-lib
-    - testing-job
-  allow_failure: true
+
 
 
 verter-check:
@@ -61,36 +42,6 @@ verter-check:
   #     - materials/build/RESULT_VERTER.txt
   #   expire_in: 5 days 
 
-
-building-job-lib:
-  stage: build
-  script:
-    - cd src
-    - make all
-    - if [ -f s21_matrix.a]; then
-    -   echo "| library not found" > VAR.txt
-    -   exit 1
-    - fi
-    - echo "" > VAR.txt
-
-
-testing-job:
-  stage: test
-  script:
-    - cd src
-    - make test > RESULT_TEST.txt
-    - cat RESULT_TEST.txt
-    - grep "Checks" RESULT_TEST.txt > VAR.txt
-    - if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
-    -   exit 1
-    - fi
-  needs:
-    - building-job-lib
-  artifacts: 
-    when: on_failure
-    paths:
-      - src/RESULT_TEST.txt
-    expire_in: 5 days
 
 
 gcovr-job:

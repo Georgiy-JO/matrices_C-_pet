@@ -8,6 +8,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
   format-check-main:
     runs-on: self-hosted
     steps:
@@ -32,6 +33,7 @@ jobs:
         continue-on-error: true
 
     continue-on-error: true
+
 
   format-check-tests:
     runs-on: self-hosted
@@ -89,13 +91,108 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure() 
         with:
-          name: cpp-check-output-file
-          path: src/CPP_CHECK.txt
+          name: cpp-check-error-list
+          path: src/CPP_CHECK.txt 
+          retention-days: 5    
 
     continue-on-error: true
   #* -can adjust how many CPP-check issues may exist for successfull pass
 
 
+  valgrind-check:    
+    runs-on: self-hosted
+    needs: [building-lib-job, testing-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: C++/C code with Valgrind
+        run: |
+          cd src
+          make valgrind_me
+          grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" RESULT_VALGRIND.txt > VAR.txt
+          if [ $(grep -oP "[0-9]+" VAR.txt) -ne 0 ]; then 
+            echo "| $(grep . VAR.txt) error(s)" > VAR.txt
+            exit 1
+          fi
+          echo "" > VAR.txt
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_url: ${{ secrets.BOT_GLADOS_URL }}
+          bot_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: always() 
+        with:
+          name: valgrind-output
+          path: src/RESULT_VALGRIND.txt  
+          retention-days: 5    
+
+    continue-on-error: true
+
+
+  building-lib-job:    
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Building the library
+        run: |
+         cd src
+         make all
+         if [ -f s21_matrix.a]; then
+           echo "| library not built" > VAR.txt
+           exit 1
+         fi
+         echo "" > VAR.txt
+    
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_url: ${{ secrets.BOT_GLADOS_URL }}
+          bot_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+
+  testing-job:
+    runs-on: self-hosted
+    needs: [building-lib-job]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name:
+        run: |
+          cd src
+          make test > RESULT_TEST.txt
+          cat RESULT_TEST.txt
+          grep "Checks" RESULT_TEST.txt > VAR.txt
+          if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
+            exit 1
+          fi
+
+      - name: Sending bot message
+        if: always()
+        uses: ./.github/actions/bot_messaging
+        with:
+          bot_url: ${{ secrets.BOT_GLADOS_URL }}
+          bot_id: ${{ secrets.JO_CHAT_ID }}
+          job_status: ${{ job.status }}
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: failure() 
+        with:
+          name: tests-results
+          path: src/RESULT_TEST.txt
+          retention-days: 5  
 
 
 
@@ -104,25 +201,3 @@ jobs:
 
 
 
-
-
-
-
-
-
-        
-  # build:
-  #   runs-on: self-hosted
-  #   # runs-on: ubuntu-latest
-
-  #   steps:
-  #     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-  #     - uses: actions/checkout@v4
-
-  #     # Runs a set of commands using the runners shell
-  #     - name: Run a multi-line script
-  #       run: |
-  #         echo "Add other actions to build,"
-  #         echo "test, and deploy your project."
-  #         pwd
-  #         ls

@@ -32,10 +32,9 @@ runs:
 
 # Comment required jobs: 
 #     cpp-check, 
-#     building-job-lib, 
-#     verter-check(POST-BUILD), 
-#     testing-job(TEST),
 #     valgrind-check (POST-TEST), 
+#     building-lib-job, 
+#     testing-job(TEST),
 #     gcovr-job(COVERAGE), 
 #     clean-test-job(EXTRA).
 # Comment free jobs: 
