@@ -2,11 +2,11 @@ name: 'Bot messaging'
 description: 'This action sends CICD job and step info via telegram bot.'
 
 inputs:
-  bot_url:
-    description: 'Telegram bot API token for url (BOT_GLADOS_URL)'
+  bot_token:
+    description: 'Telegram bot API token for url'
     required: true
-  bot_id:
-    description: 'Telegram chat ID (JO_CHAT_ID)'
+  chat_id:
+    description: 'Telegram chat ID'
     required: true
   job_status:
     description: 'Stores the status of the job'
@@ -15,29 +15,16 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Creating empty comment file
+    - name: Creating empty comment file if needed
       shell: bash
-      run: |
-        if [ "$GITHUB_JOB" == "format-check-main" ] || [ "$GITHUB_JOB" == "format-check-tests" ]; then 
-          echo "" > src/VAR.txt
-        fi
+      run: echo "" >> src/VAR.txt
 
     - name: Sending message
       shell: bash
       env:
-        BOT_GLADOS_URL: ${{ inputs.bot_url }}
-        JO_CHAT_ID: ${{ inputs.bot_id }}
+        BOT_GLADOS_URL: ${{ inputs.bot_token }}
+        CHAT_ID: ${{ inputs.chat_id }}
         JOB_STATUS: ${{ inputs.job_status }}
       run: sh ./.github/bot_controls.sh
-
-# Comment required jobs: 
-#     cpp-check, 
-#     valgrind-check (POST-TEST), 
-#     building-lib-job, 
-#     testing-job(TEST),
-#     gcovr-job(COVERAGE), 
-#     clean-test-job(EXTRA).
-# Comment free jobs: 
-#     format-check-main,
-#     format-check-tests.     
+  
 

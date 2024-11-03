@@ -27,8 +27,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
 
@@ -53,8 +53,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
 
@@ -82,8 +82,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
 
@@ -120,8 +120,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
 
@@ -155,8 +155,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
 
@@ -181,8 +181,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
 
@@ -217,8 +217,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
   
@@ -272,8 +272,8 @@ jobs:
         if: always()
         uses: ./.github/actions/bot_messaging
         with:
-          bot_url: ${{ secrets.BOT_GLADOS_URL }}
-          bot_id: ${{ secrets.JO_CHAT_ID }}
+          bot_token: ${{ secrets.BOT_GLADOS_URL }}
+          chat_id: ${{ secrets.JO_CHAT_ID }}
           job_status: ${{ job.status }}
         continue-on-error: true
     
