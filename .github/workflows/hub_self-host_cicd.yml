@@ -66,7 +66,7 @@ jobs:
           make cpp_check &> CPP_CHECK.txt
           cat CPP_CHECK.txt
           echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
-          if [ $(cat VAR.txt) -gt 3 ]; then  #*
+          if [ $(cat VAR.txt) -gt 2 ]; then  #*
             echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
             exit 1
           fi
