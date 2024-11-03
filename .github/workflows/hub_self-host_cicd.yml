@@ -8,18 +8,66 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  format-check:
     runs-on: self-hosted
-    # runs-on: ubuntu-latest
-
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Checking code style of main code files
         run: |
-          echo "Add other actions to build,"
-          echo "test, and deploy your project."
-          pwd
-          ls
+          cd src
+          clang-format --style=Google -n *.c *.h
+          clang-format --style=Google -i *.c *.h
+          if ! git diff --quiet; then
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Sending bot message
+        uses: ./.github/actions/bot_messaging.yml
+
+
+      - name: Checking code style of test files
+        run: |
+          cd src/tests
+          clang-format --style=Google -n *.c
+          clang-format --style=Google -i *.c
+          if ! git diff --quiet; then
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Sending bot message
+        uses: ./.github/actions/bot_messaging.yml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+  # build:
+  #   runs-on: self-hosted
+  #   # runs-on: ubuntu-latest
+
+  #   steps:
+  #     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+  #     - uses: actions/checkout@v4
+
+  #     # Runs a set of commands using the runners shell
+  #     - name: Run a multi-line script
+  #       run: |
+  #         echo "Add other actions to build,"
+  #         echo "test, and deploy your project."
+  #         pwd
+  #         ls

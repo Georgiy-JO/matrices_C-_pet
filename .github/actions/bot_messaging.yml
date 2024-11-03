@@ -1,0 +1,21 @@
+name: 'Bot message'
+description: 'This action sends CICD job and step info via telegram bot.'
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+      if [ $CI_JOB_NAME == "format-check-main" ] || [ $CI_JOB_NAME == "format-check-test" ]; then 
+      echo "" > src/VAR.txt
+      fi
+      sh ./bot_controls.sh
+
+# Comment required jobs: 
+#     cpp-check, 
+#     building-job-lib, 
+#     verter-check(POST-BUILD), 
+#     testing-job(TEST),
+#     valgrind-check (POST-TEST), 
+#     gcovr-job(COVERAGE), 
+#     clean-test-job(EXTRA).
+# Comment free jobs: 
+#     format-check.     
