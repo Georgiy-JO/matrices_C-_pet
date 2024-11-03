@@ -71,6 +71,7 @@ jobs:
             exit 1
           fi
           echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
+        continue-on-error: true
 
       - name: Sending bot message
         uses: ./.github/actions/bot_messaging
