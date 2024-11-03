@@ -109,7 +109,7 @@ valgrind_me: $(TEST_EXEC)
 	$(VALG)$(TEST_EXEC)
 
 cpp_check:
-	$(CPPCHECK) **/*c **/*h *.h *.c
+	$(CPPCHECK) **/*.c **/*.h *.h *.c */*.c */*.h
 
 
 # service

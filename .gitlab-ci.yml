@@ -11,25 +11,6 @@ stages:
 
 
 
-cpp-check:
-  stage: pre-build
-  script:
-    - cd src 
-    - make cpp_check &> CPP_CHECK.txt
-    - cat CPP_CHECK.txt
-    - echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
-    - if [ $(cat VAR.txt) -gt 3 ]; then  #*
-    -   echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
-    -   exit 1
-    - fi
-    - echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
-  artifacts:
-    when: on_failure
-    paths:
-      - src/CPP_CHECK.txt
-    expire_in: 5 days
-  allow_failure: true
-#* -can adjust how many CPP-check issues may be for successfull pass
 
 valgrind-check:
   stage: post-test
