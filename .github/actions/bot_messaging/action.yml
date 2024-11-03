@@ -1,13 +1,13 @@
-name: 'Bot massaging'
+name: 'Bot messaging'
 description: 'This action sends CICD job and step info via telegram bot.'
 runs:
   using: 'composite'
   steps:
     - run: |
-      if [ "$GITHUB_JOB" == "format-check-main" ] || [ "$GITHUB_JOB" == "format-check-tests" ]; then 
-      echo "" > src/VAR.txt
-      fi
-      sh ./bot_controls.sh
+        if [ "$GITHUB_JOB" == "format-check-main" ] || [ "$GITHUB_JOB" == "format-check-tests" ]; then 
+          echo "" > src/VAR.txt
+        fi
+        sh ./bot_controls.sh
 
 # Comment required jobs: 
 #     cpp-check, 
@@ -20,3 +20,4 @@ runs:
 # Comment free jobs: 
 #     format-check-main,
 #     format-check-tests.     
+
