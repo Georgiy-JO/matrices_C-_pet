@@ -240,37 +240,69 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checking cleaning abilities
+      - name: Preparation
         run: |
+          echo "0" > status.txt
+
+      - name: Library target cleaning test
+        run: |
+          find . -type f > before.txt
           cd src
-          git rev-parse --is-inside-work-tree
-          echo "Library st cleaning test"
           make s21_matrix.a
           make clean
-          echo ">>>Library st cleaning test. Not cleaned files:"
-          git diff --name-only
-          if ! git diff --name-only; then
+          cd ..
+          find . -type f > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
             echo "library st cleaning error" > VAR.txt
-            exit 1
+            echo "1" > status.txt            
           fi
+
+      - name: All target cleaning test
+        run: |
+          find . -type f > before.txt
+          cd src
           make all
           make clean
-          echo ">>>All st cleaning test. Not cleaned files:"
-          if ! git diff --quiet; then
+          cd ..
+          find . -type f > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
             echo "all st cleaning error" > VAR.txt
-            exit 1
+            echo "1" > status.txt            
           fi
-          make test
+
+      - name: Test target cleaning test
+        run: |
+          find . -type f > before.txt
+          cd src
+          make all
           make clean
-          echo ">>>Test st cleaning test. Not cleaned files:"
-          if ! git diff --quiet; then
+          cd ..
+          find . -type f > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
             echo "test st cleaning error" > VAR.txt
-            exit 1
+            echo "1" > status.txt            
           fi
-          make gcov_report
+
+      - name: Coverage target cleaning test
+        run: |
+          find . -type f > before.txt
+          cd src
+          make all
           make clean
-          echo ">>>Coverage st cleaning test. Not cleaned files:"
-          if ! git diff --quiet; then
+          cd ..
+          find . -type f > after.txt
+          if ! diff before.txt after.txt > /dev/null; then
+            echo "Not cleaned files:"
+            echo "gcov st cleaning error" > VAR.txt
+            echo "1" > status.txt            
+          fi
+
+      - name: Result of job set
+        run: |
+          if [ "$(cat status.txt)" = "1" ]; then
             echo "gcov st cleaning error" > VAR.txt
             exit 1
           fi
