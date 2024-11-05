@@ -248,6 +248,7 @@ jobs:
           make clean
           if ! git diff --quiet; then
             echo "| library st cleaning error" > VAR.txt
+            echo "Fuck YOU"
             exit 1
           fi
           make all
@@ -278,4 +279,3 @@ jobs:
           job_status: ${{ job.status }}
         continue-on-error: true
     
-    continue-on-error: true
