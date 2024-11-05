@@ -2101,7 +2101,7 @@ START_TEST(test_m_determinant_2_10) {
   ck_assert_int_eq(s21_determinant(&matrx_1, &det), check);
   ck_assert_double_eq_tol(det, det_check, 0.00000005);
 
-  s21_remove_matrix(&matrx_1);
+  // s21_remove_matrix(&matrx_1);
 }
 // elevator    transpose
 START_TEST(test_m_transpose_1) {
