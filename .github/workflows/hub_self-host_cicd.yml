@@ -254,7 +254,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            echo "library st cleaning error" > VAR.txt
+            diff before.txt after.txt
+            echo "library st cleaning error" >> VAR.txt
             echo "1" > status.txt            
           fi
 
@@ -268,7 +269,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            echo "all st cleaning error" > VAR.txt
+            diff before.txt after.txt
+            echo "all st cleaning error" >> VAR.txt
             echo "1" > status.txt            
           fi
 
@@ -282,7 +284,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            echo "test st cleaning error" > VAR.txt
+            diff before.txt after.txt
+            echo "test st cleaning error" >> VAR.txt
             echo "1" > status.txt            
           fi
 
@@ -296,14 +299,14 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            echo "gcov st cleaning error" > VAR.txt
+            diff before.txt after.txt
+            echo "gcov st cleaning error" >> VAR.txt
             echo "1" > status.txt            
           fi
 
       - name: Result of job set
         run: |
           if [ "$(cat status.txt)" = "1" ]; then
-            echo "gcov st cleaning error" > VAR.txt
             exit 1
           fi
 
