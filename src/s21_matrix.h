@@ -17,8 +17,7 @@
 #define MATRIX_INIT \
   { NULL, 0, 0 }
 
-typedef struct matrix_struct {
-  double **matrix;
+typedef struct matrix_struct {  double **matrix;
   int rows;
   int columns;
 } matrix_t;

@@ -10,18 +10,15 @@ START_TEST(test_m_legit_1_2) {
   output = s21_if_matrix_legit(matrix_1);
   ck_assert_int_eq(output, check);
 }
-START_TEST(test_m_legit_1_4) {
-  matrix_t matrix_1;
+START_TEST(test_m_legit_1_4) {  matrix_t matrix_1;
   int output = 0, check = 0;
 
   matrix_1.columns = 5;
   matrix_1.rows = 5;
-  matrix_1.matrix = (double **)calloc(matrix_1.rows, sizeof(double *));
-  check = 1;
+  matrix_1.matrix = (double **)calloc(matrix_1.rows, sizeof(double *));  check = 1;
 
   output = s21_if_matrix_legit(&matrix_1);
-  ck_assert_int_eq(output, check);
-  free(matrix_1.matrix);
+  ck_assert_int_eq(output, check);  free(matrix_1.matrix);
 }
 START_TEST(test_m_legit_1_5) {
   matrix_t matrix_1;
