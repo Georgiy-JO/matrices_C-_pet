@@ -170,13 +170,11 @@ jobs:
       - name: Runing tests
         run: |
           cd src
-          make test > RESULT_TEST.txt
+          make test > RESULT_TEST.txt || true
           cat RESULT_TEST.txt
           echo "|" > VAR.txt
           grep "Checks" RESULT_TEST.txt >> VAR.txt
-          cat VAR.txt 
           if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
-            cat VAR.txt 
             exit 1
           fi
 
