@@ -73,10 +73,10 @@ jobs:
           cat CPP_CHECK.txt
           echo "$(grep "\^" CPP_CHECK.txt | wc -l)" > VAR.txt
           if [ $(cat VAR.txt) -gt 3 ]; then                                                   #*
-            echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
+            echo "$(grep . VAR.txt) issue(s)" > VAR.txt
             exit 1
           fi
-          echo "| $(grep . VAR.txt) issue(s)" > VAR.txt
+          echo "$(grep . VAR.txt) issue(s)" > VAR.txt
 
       - name: Sending bot message
         if: always()
@@ -111,7 +111,7 @@ jobs:
           make valgrind_me
           grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" RESULT_VALGRIND.txt > VAR.txt
           if [ $(grep -oP "[0-9]+" VAR.txt) -ne 0 ]; then 
-            echo "| $(grep . VAR.txt) error(s)" > VAR.txt
+            echo "$(grep . VAR.txt) error(s)" > VAR.txt
             exit 1
           fi
           echo "" > VAR.txt
@@ -146,7 +146,7 @@ jobs:
          cd src
          make all
          if [ -f s21_matrix.a]; then
-           echo "| library not built" > VAR.txt
+           echo "library not built" > VAR.txt
            exit 1
          fi
          echo "" > VAR.txt
@@ -172,7 +172,6 @@ jobs:
           cd src
           make test > RESULT_TEST.txt || true
           cat RESULT_TEST.txt
-          echo "|" > VAR.txt
           grep "Checks" RESULT_TEST.txt >> VAR.txt
           if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
             exit 1
@@ -209,10 +208,10 @@ jobs:
           cat TEMP_COV.txt
           grep -oP "Lines executed:\K[0-9]+" TEMP_COV.txt | grep -oP "[0-9]+" | tail -1 > VAR.txt
           if [ $(grep . VAR.txt) -lt 95 ]; then                                               #*
-            echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
+            echo "Executed $(cat VAR.txt)% lines" > VAR.txt
             exit 1
           fi
-          echo "| Executed $(cat VAR.txt)% lines" > VAR.txt
+          echo "Executed $(cat VAR.txt)% lines" > VAR.txt
 
       - name: Sending bot message
         if: always()
@@ -244,29 +243,33 @@ jobs:
       - name: Checking cleaning abilities
         run: |
           cd src
+          echo "Library st cleaning test"
           make s21_matrix.a
           make clean
           if ! git diff --quiet; then
-            echo "| library st cleaning error" > VAR.txt
+            echo "library st cleaning error" > VAR.txt
             echo "Fuck YOU"
             exit 1
           fi
+          echo "All st cleaning test"
           make all
           make clean
           if ! git diff --quiet; then
-            echo "| all st cleaning error" > VAR.txt
+            echo "all st cleaning error" > VAR.txt
             exit 1
           fi
+          echo "Test st cleaning test"
           make test
           make clean
           if ! git diff --quiet; then
-            echo "| test st cleaning error" > VAR.txt
+            echo "test st cleaning error" > VAR.txt
             exit 1
           fi
+          echo "Coverage st cleaning test"
           make gcov_report
           make clean
           if ! git diff --quiet; then
-            echo "| gcov st cleaning error" > VAR.txt
+            echo "gcov st cleaning error" > VAR.txt
             exit 1
           fi
 

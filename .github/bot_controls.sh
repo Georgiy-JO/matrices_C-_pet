@@ -20,11 +20,15 @@ echo "Sending message to the bot!"
 # VAR_message="$GITHUB_TRIGGERING_ACTOR|$VAR_PROJECT|$GITHUB_JOB->"
 VAR_message="$VAR_PROJECT|$GITHUB_JOB->"
 if [ "$VAR_JOB_STATUS" = "success" ]; then      #✅ - succeed
-    VAR_message="$VAR_message✅$VAR_comment"
-elif [ "$VAR_JOB_STATUS" = "failure" ]; then     #❎ - failed
-    VAR_message="$VAR_message❌$VAR_comment"
-else                                           #🛑 - canceled
-    VAR_message="$VAR_message🛑$VAR_comment"
+    VAR_message="$VAR_message✅"
+elif [ "$VAR_JOB_STATUS" = "failure" ]; then    #❎ - failed
+    VAR_message="$VAR_message❌"
+else                                            #🛑 - canceled
+    VAR_message="$VAR_message🛑"
+fi
+
+if [ -z $VAR_comment ]; then
+    VAR_message="$VAR_message|$VAR_comment"
 fi
 
 curl -X POST -s -o /dev/null -d chat_id=$VAR_bot_chat_ID -d text="$VAR_message" $VAR_message_URL
