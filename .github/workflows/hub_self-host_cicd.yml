@@ -172,8 +172,10 @@ jobs:
           cd src
           make test > RESULT_TEST.txt
           cat RESULT_TEST.txt
-          grep "Checks" RESULT_TEST.txt > VAR.txt
+          echo "|" > VAR.txt
+          grep "Checks" RESULT_TEST.txt >> VAR.txt
           if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
+            cat VAR.txt 
             exit 1
           fi
 
