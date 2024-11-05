@@ -243,6 +243,7 @@ jobs:
       - name: Checking cleaning abilities
         run: |
           cd src
+          git rev-parse --is-inside-work-tree
           echo "Library st cleaning test"
           make s21_matrix.a
           make clean
