@@ -397,17 +397,3 @@ int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
   }
   return flag;
 }
-
-
-void s21_r_matrix(matrix_t *A) {  if (A != NULL) {
-    if (A->matrix != NULL && A->rows > 0) {
-      for (int i = 0; i < (A->rows); i++) {
-        if (A->matrix[i] != NULL) free(A->matrix[i]);
-      }
-      free(A->matrix);
-      A->matrix = NULL;
-    }
-    A->columns = 0;
-    A->rows = 0;
-  }
-}
