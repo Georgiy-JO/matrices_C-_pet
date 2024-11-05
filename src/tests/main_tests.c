@@ -2008,7 +2008,7 @@ START_TEST(test_m_determinant_2_7) {
   int rows = 3, columns = 3;
   double arr[100];
   int check = 0;
-  double det = 1, det_check = 7986;
+  double det = 1, det_check = 0;
   for (int i = 0, j = 0; i < rows * columns; i++, j += 5) {
     arr[i] = j + (double)i / 2;
   }
