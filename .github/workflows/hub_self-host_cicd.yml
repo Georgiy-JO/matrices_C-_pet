@@ -254,8 +254,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            diff before.txt after.txt
-            echo "library st cleaning error" >> VAR.txt
+            diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
+            echo "library st cleaning error" >> src/VAR.txt
             echo "1" > status.txt            
           fi
 
