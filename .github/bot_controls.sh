@@ -27,7 +27,7 @@ else                                            #🛑 - canceled
     VAR_message="$VAR_message🛑"
 fi
 
-if [ -z $VAR_comment ]; then
+if [! -z $VAR_comment ]; then
     VAR_message="$VAR_message|$VAR_comment"
 fi
 

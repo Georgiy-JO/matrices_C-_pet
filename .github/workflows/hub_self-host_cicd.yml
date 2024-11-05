@@ -246,7 +246,7 @@ jobs:
           echo "Library st cleaning test"
           make s21_matrix.a
           make clean
-          if ! git diff --quiet; then
+          if [ ! git diff --quiet ]; then
             echo "library st cleaning error" > VAR.txt
             echo "Fuck YOU"
             exit 1
