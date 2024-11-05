@@ -269,8 +269,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            diff before.txt after.txt
-            echo "all st cleaning error" >> VAR.txt
+            diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
+            echo "all st cleaning error" >> src/VAR.txt
             echo "1" > status.txt            
           fi
 
@@ -284,8 +284,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            diff before.txt after.txt
-            echo "test st cleaning error" >> VAR.txt
+            diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
+            echo "test st cleaning error" >> src/VAR.txt
             echo "1" > status.txt            
           fi
 
@@ -299,8 +299,8 @@ jobs:
           find . -type f > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
-            diff before.txt after.txt
-            echo "gcov st cleaning error" >> VAR.txt
+            diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
+            echo "gcov st cleaning error" >> src/VAR.txt
             echo "1" > status.txt            
           fi
 

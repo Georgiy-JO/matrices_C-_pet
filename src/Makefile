@@ -127,7 +127,7 @@ clear_cov:
 	rm -fr $(COV_DIR)
 
 clear: clear_cov clear_gc clear_o
-	rm -fr $(BUILD_DIR) 
+	rm -fr $(LIB_NAME) $(LIB_COV_NAME) $(VALG_FILE)  $(CPPCHECK_FILE)  
 
 clean: clear
 
