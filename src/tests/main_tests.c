@@ -10,15 +10,18 @@ START_TEST(test_m_legit_1_2) {
   output = s21_if_matrix_legit(matrix_1);
   ck_assert_int_eq(output, check);
 }
-START_TEST(test_m_legit_1_4) {  matrix_t matrix_1;
+START_TEST(test_m_legit_1_4) {
+  matrix_t matrix_1;
   int output = 0, check = 0;
 
   matrix_1.columns = 5;
   matrix_1.rows = 5;
-  matrix_1.matrix = (double **)calloc(matrix_1.rows, sizeof(double *));  check = 1;
+  matrix_1.matrix = (double **)calloc(matrix_1.rows, sizeof(double *));
+  check = 1;
 
   output = s21_if_matrix_legit(&matrix_1);
-  ck_assert_int_eq(output, check);  free(matrix_1.matrix);
+  ck_assert_int_eq(output, check);
+  free(matrix_1.matrix);
 }
 START_TEST(test_m_legit_1_5) {
   matrix_t matrix_1;
@@ -1586,7 +1589,8 @@ START_TEST(test_m_minor_maker_1_2) {
   ck_assert_int_eq(s21_minor_maker(&matrx_1, rm_row, rm_column, &result),
                    check);
   for (int i = 0, j = 6; i < rows * columns; i++, j++) {
-    if (j % 5 == 0) j++;
+    if (j % 5 == 0)
+      j++;
     arr[i] = j;
   }
   ck_assert_int_eq(s21_matrix_builder(rows, columns, &check_m, arr), check);
@@ -1615,7 +1619,8 @@ START_TEST(test_m_minor_maker_1_3) {
                    check);
 
   for (int k = 0, l = 0; k < rows * columns; k++, l++) {
-    if (l == 3 || l == 17 || l == 24 || l == 31) l++;
+    if (l == 3 || l == 17 || l == 24 || l == 31)
+      l++;
     if (l == 7) {
       l += 7;
     }
@@ -1653,7 +1658,8 @@ START_TEST(test_m_minor_maker_1_4) {
                    check);
 
   for (int k = 0, l = 0; k < rows * columns; k++, l++) {
-    if (l == 6 || l == 13 || l == 20 || l == 27) l++;
+    if (l == 6 || l == 13 || l == 20 || l == 27)
+      l++;
     arr[k] = l * 2;
   }
   ck_assert_int_eq(s21_matrix_builder(rows, columns, &check_m, arr), check);
@@ -1736,7 +1742,8 @@ START_TEST(test_m_minor_maker_2_2) {
   rows--;
   columns--;
   for (int i = 0, j = 6; i < rows * columns; i++, j++) {
-    if (j % 5 == 0) j++;
+    if (j % 5 == 0)
+      j++;
     arr[i] = j;
   }
   ck_assert_int_eq(s21_matrix_builder(rows, columns, &check_m, arr), check);
@@ -1763,7 +1770,8 @@ START_TEST(test_m_minor_maker_2_3) {
   rows--;
   columns--;
   for (int k = 0, l = 0; k < rows * columns; k++, l++) {
-    if (l == 3 || l == 17 || l == 24 || l == 31) l++;
+    if (l == 3 || l == 17 || l == 24 || l == 31)
+      l++;
     if (l == 7) {
       l += 7;
     }
@@ -1793,7 +1801,8 @@ START_TEST(test_m_minor_maker_2_4) {
   rows--;
   columns--;
   for (int k = 0, l = 0; k < rows * columns; k++, l++) {
-    if (l == 6 || l == 13 || l == 20 || l == 27) l++;
+    if (l == 6 || l == 13 || l == 20 || l == 27)
+      l++;
     arr[k] = l * 2;
   }
   ck_assert_int_eq(s21_matrix_builder(rows, columns, &check_m, arr), check);
@@ -1906,7 +1915,8 @@ START_TEST(test_m_determinant_1_6) {
   double det = 1, det_check = -20715209266.50003;
   for (int i = 0, j = 0; i < rows * columns; i++, j += 5) {
     arr[i] = j + (double)i / 2 + j * i + ((double)j + 1.5) / 2;
-    if (i % 3 == 0) arr[i] *= -1;
+    if (i % 3 == 0)
+      arr[i] *= -1;
   }
   ck_assert_int_eq(s21_matrix_builder(rows, columns, &matrx_1, arr), check);
   det = s21_determinant_recursive(matrx_1);

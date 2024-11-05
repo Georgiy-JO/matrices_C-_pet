@@ -7,17 +7,18 @@
 #define SUCCESS 1
 #define FAILURE 0
 
-#define EPSILON (double)1e-7  // precision for comparing with zero
+#define EPSILON (double)1e-7 // precision for comparing with zero
 
 #define EQUAL 0
 #define NOT_EQUAL 1
 
 #define DOUBLE_ZERO (double)0
 
-#define MATRIX_INIT \
+#define MATRIX_INIT                                                            \
   { NULL, 0, 0 }
 
-typedef struct matrix_struct {  double **matrix;
+typedef struct matrix_struct {
+  double **matrix;
   int rows;
   int columns;
 } matrix_t;

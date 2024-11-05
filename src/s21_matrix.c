@@ -2,7 +2,8 @@
 
 // Basic functions --------------------------------------------------
 int s21_create_matrix(int rows, int columns, matrix_t *result) {
-  if (rows <= 0 || columns <= 0) return INPUT_ERR;
+  if (rows <= 0 || columns <= 0)
+    return INPUT_ERR;
   int flag = SUCCESS_CALC;
   if (result != NULL)
     flag = (s21_the_matrix_sizer(rows, columns, result)) ? SUCCESS_CALC
@@ -21,7 +22,8 @@ int s21_the_matrix_sizer(int rows, int columns, matrix_t *result)
   result->columns = columns;
   result->rows = rows;
   result->matrix = (double **)calloc(rows, sizeof(double *));
-  if (result->matrix == NULL) flag = FAILURE;
+  if (result->matrix == NULL)
+    flag = FAILURE;
   for (int i = 0; flag != FAILURE && i < rows; i++) {
     result->matrix[i] = (double *)calloc(columns, sizeof(double));
     if (result->matrix[i] == NULL) {
@@ -36,10 +38,12 @@ int s21_the_matrix_sizer(int rows, int columns, matrix_t *result)
   return flag;
 }
 
-void s21_remove_matrix(matrix_t *A) {  if (A != NULL) {
+void s21_remove_matrix(matrix_t *A) {
+  if (A != NULL) {
     if (A->matrix != NULL && A->rows > 0) {
       for (int i = 0; i < (A->rows); i++) {
-        if (A->matrix[i] != NULL) free(A->matrix[i]);
+        if (A->matrix[i] != NULL)
+          free(A->matrix[i]);
       }
       free(A->matrix);
       A->matrix = NULL;
@@ -63,9 +67,11 @@ int s21_if_matrix_legit(const matrix_t *matr) {
 int s21_more_presice_check(const matrix_t *matr) {
   int flag = SUCCESS;
   for (int i = 0; flag == SUCCESS && i < matr->rows; i++) {
-    if (matr->matrix[i] == NULL) flag = FAILURE;
+    if (matr->matrix[i] == NULL)
+      flag = FAILURE;
     for (int j = 0; flag == SUCCESS && j < matr->columns; j++) {
-      if (!s21_if_double_legit(matr->matrix[i][j])) flag = FAILURE;
+      if (!s21_if_double_legit(matr->matrix[i][j]))
+        flag = FAILURE;
     }
   }
   return flag;
@@ -75,7 +81,8 @@ int s21_more_presice_check(const matrix_t *matr) {
 // never been checked independently
 int s21_if_matrix_rows_legit(const matrix_t *matr) {
   for (int i = 0; i < (matr->rows); i++) {
-    if (matr->matrix[i] == NULL) return FAILURE;
+    if (matr->matrix[i] == NULL)
+      return FAILURE;
   }
   return SUCCESS;
 }
@@ -136,14 +143,16 @@ int s21_filling_matrix(matrix_t *mtrx, const double *array) {
 // (ノ ◑‿◑)ノ (I'm creating and filling a matrix)
 int s21_matrix_builder(int rows, int columns, matrix_t *result,
                        const double *array) {
-  if (s21_create_matrix(rows, columns, result)) return INPUT_ERR;
+  if (s21_create_matrix(rows, columns, result))
+    return INPUT_ERR;
   return s21_filling_matrix(result, array);
 }
 
 // (ノ ◑‿◑)ノ (I'm recreating and filling the matrix)
 int s21_matrix_rebuilder(int rows, int columns, matrix_t *result,
                          const double *array) {
-  if (s21_recreate_matrix(rows, columns, result)) return INPUT_ERR;
+  if (s21_recreate_matrix(rows, columns, result))
+    return INPUT_ERR;
   return s21_filling_matrix(result, array);
 }
 
@@ -186,9 +195,11 @@ int s21_minor_maker(matrix_t *A, int row, int column, matrix_t *result) {
              : CALC_ERR;
   if (!flag) {
     for (int i = 0, k = 0; k < result->rows; i++, k++) {
-      if (i == row) i++;
+      if (i == row)
+        i++;
       for (int j = 0, l = 0; l < result->columns; j++, l++) {
-        if (j == column) j++;
+        if (j == column)
+          j++;
         result->matrix[k][l] = A->matrix[i][j];
       }
     }
@@ -202,7 +213,8 @@ int s21_minor_maker_complex(matrix_t *A, int row, int column,
   if (A == NULL || s21_create_matrix(A->rows - 1, A->columns - 1, result))
     return INPUT_ERR;
   int flag = s21_minor_maker(A, row, column, result);
-  if (flag) s21_remove_matrix(result);
+  if (flag)
+    s21_remove_matrix(result);
   return flag;
 }
 
@@ -236,7 +248,8 @@ int s21_calc_complements_waggon(matrix_t *A, matrix_t *result) {
           flag = s21_determinant(&temp, &det);
           s21_remove_matrix(&temp);
         }
-        if (!flag) result->matrix[i][j] = pow(-1, i + j) * det;
+        if (!flag)
+          result->matrix[i][j] = pow(-1, i + j) * det;
       }
     }
   }
@@ -299,7 +312,8 @@ int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result) {
 }
 
 int s21_mult_number(matrix_t *A, double number, matrix_t *result) {
-  if (!s21_if_matrix_legit_complex(A) || result == NULL) return INPUT_ERR;
+  if (!s21_if_matrix_legit_complex(A) || result == NULL)
+    return INPUT_ERR;
   int flag = (s21_if_double_legit(number)) ? SUCCESS_CALC : INPUT_ERR;
   if (!flag)
     flag = (!s21_create_matrix(A->rows, A->columns, result)) ? SUCCESS_CALC
@@ -348,10 +362,12 @@ int s21_transpose(matrix_t *A, matrix_t *result) {
 }
 
 int s21_determinant(matrix_t *A, double *result) {
-  if (!s21_if_matrix_legit_complex(A) || result == NULL) return INPUT_ERR;
+  if (!s21_if_matrix_legit_complex(A) || result == NULL)
+    return INPUT_ERR;
   int flag = (A->rows == A->columns) ? SUCCESS_CALC : CALC_ERR;
 
-  if (!flag) *result = s21_determinant_recursive(*A);
+  if (!flag)
+    *result = s21_determinant_recursive(*A);
   if (isnan(*result)) {
     flag = CALC_ERR;
     *result = 0;
@@ -360,7 +376,8 @@ int s21_determinant(matrix_t *A, double *result) {
 }
 
 int s21_calc_complements(matrix_t *A, matrix_t *result) {
-  if (!s21_if_matrix_legit_complex(A) || result == NULL) return INPUT_ERR;
+  if (!s21_if_matrix_legit_complex(A) || result == NULL)
+    return INPUT_ERR;
   int flag = (A->rows == A->columns) ? SUCCESS_CALC : CALC_ERR;
   flag = (!flag && !s21_create_matrix(A->rows, A->columns, result))
              ? SUCCESS_CALC
@@ -368,13 +385,15 @@ int s21_calc_complements(matrix_t *A, matrix_t *result) {
 
   if (!flag) {
     flag = s21_calc_complements_waggon(A, result);
-    if (flag) s21_remove_matrix(result);
+    if (flag)
+      s21_remove_matrix(result);
   }
   return flag;
 }
 
 int s21_inverse_matrix(matrix_t *A, matrix_t *result) {
-  if (!s21_if_matrix_legit_complex(A) || result == NULL) return INPUT_ERR;
+  if (!s21_if_matrix_legit_complex(A) || result == NULL)
+    return INPUT_ERR;
   int flag = (A->rows == A->columns) ? SUCCESS_CALC : CALC_ERR;
   double det = 0;
   flag = (!flag && !s21_determinant(A, &det) && det != 0) ? SUCCESS_CALC
