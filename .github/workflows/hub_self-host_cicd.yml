@@ -245,6 +245,7 @@ jobs:
           echo "0" > status.txt
           touch before.txt
           touch after.txt
+          echo "\n" > src/VAR.txt 
 
       - name: Library target cleaning test
         run: |
