@@ -261,12 +261,12 @@ jobs:
 
       - name: All target cleaning test
         run: |
-          find . -type f > before.txt
+          find . -type f ! -name after.txt > before.txt
           cd src
           make all
           make clean
           cd ..
-          find . -type f > after.txt
+          find . -type f ! -name after.txt > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
             diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
@@ -276,12 +276,12 @@ jobs:
 
       - name: Test target cleaning test
         run: |
-          find . -type f > before.txt
+          find . -type f ! -name after.txt > before.txt
           cd src
           make all
           make clean
           cd ..
-          find . -type f > after.txt
+          find . -type f ! -name after.txt > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
             diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
@@ -291,12 +291,12 @@ jobs:
 
       - name: Coverage target cleaning test
         run: |
-          find . -type f > before.txt
+          find . -type f ! -name after.txt > before.txt
           cd src
           make all
           make clean
           cd ..
-          find . -type f > after.txt
+          find . -type f ! -name after.txt > after.txt
           if ! diff before.txt after.txt > /dev/null; then
             echo "Not cleaned files:"
             diff before.txt after.txt | grep '^>' | awk '{print $2}' | grep -v './after.txt' || true
