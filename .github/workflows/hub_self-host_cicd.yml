@@ -2,7 +2,7 @@ name: CI_try
 
 # Controls when the workflow will run
 on:
-  push:
+  # push:                                         # pause the automatic CICD run
     # branches: [ "develop" ]
   workflow_dispatch: #for manual starts
 
