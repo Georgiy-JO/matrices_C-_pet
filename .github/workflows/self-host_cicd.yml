@@ -1,4 +1,4 @@
-name: CI_try
+name: Self-hosted CI
 
 # Controls when the workflow will run
 on:
