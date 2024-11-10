@@ -107,7 +107,7 @@ jobs:
       - name: C++/C code with Valgrind
         run: |
           make valgrind_me
-          grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" /build/RESULT_VALGRIND.txt > VAR.txt
+          grep -oPm 1 "ERROR SUMMARY:\s+\K[0-9]+" build/RESULT_VALGRIND.txt > VAR.txt
           if [ $(grep -oP "[0-9]+" VAR.txt) -ne 0 ]; then 
             echo "$(grep . VAR.txt) error(s)" > VAR.txt
             exit 1
@@ -128,7 +128,7 @@ jobs:
         if: always() 
         with:
           name: valgrind-output
-          path: /build/RESULT_VALGRIND.txt  
+          path: build/RESULT_VALGRIND.txt  
           retention-days: 5    
 
     continue-on-error: true
