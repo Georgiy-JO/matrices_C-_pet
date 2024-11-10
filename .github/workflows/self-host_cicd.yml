@@ -2,7 +2,7 @@ name: Self-hosted CI
 
 # Controls when the workflow will run
 on:
-  push:                                         # pause the automatic CICD run
+  # push:                                         # pause the automatic CICD run
     # branches: [ "develop" ]
   workflow_dispatch: #for manual starts
 
@@ -35,12 +35,12 @@ jobs:
     continue-on-error: true
 
 
-  format-check-test:
+  format-check-tests:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checking code style of test files
+      - name: Checking code style of tests files
         run: |
           cd tests
           clang-format --style=Google -n $(find . -type f  -name *.c -o -name *.h)
