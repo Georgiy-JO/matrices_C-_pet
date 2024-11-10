@@ -2,7 +2,7 @@ name: Self-hosted CI
 
 # Controls when the workflow will run
 on:
-  # push:                                         # pause the automatic CICD run
+  push:                                         # pause the automatic CICD run
     # branches: [ "develop" ]
   workflow_dispatch: #for manual starts
 
