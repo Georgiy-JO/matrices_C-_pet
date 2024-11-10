@@ -22,14 +22,14 @@ CLANG = clang-format --style=Google
 # directories 
 BUILD_DIR = build
 SRC_DIR=src
-TEST_DIR=test
+TEST_DIR=tests
 OBJ_DIR = $(BUILD_DIR)/service_files
 COV_DIR = $(BUILD_DIR)/coverage
 VALG_FILE = $(BUILD_DIR)/RESULT_VALGRIND.txt
 CPPCHECK_FILE = $(BUILD_DIR)/RESULT_CPPCHECK.txt
 
 # main files 
-# SRC_FILES = $(shell find . ! -path './test/*' -type  f -name '*.c')			# for dif file conf
+# SRC_FILES = $(shell find . ! -path './tests/*' -type  f -name '*.c')			# for dif file conf
 SRC_FILES = $(shell find $(SRC_DIR)/ -type  f -name '*.c')
 HEAD_FILES = $(shell find $(SRC_DIR)/ -type f -name '*.h')
 OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_FILES:.c=.o)))
@@ -145,7 +145,6 @@ rebuild_test: clear test
 rebuild_test_cov: clear test_cov
 
 rebuild_report: clear gcov_report
-
 
 
 
