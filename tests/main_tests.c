@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../s21_matrix.h"
+#include "../src/s21_matrix.h"
 // elevator    begining
 START_TEST(test_m_legit_1_2) {
   const matrix_t *matrix_1 = NULL;
