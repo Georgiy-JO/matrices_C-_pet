@@ -37,7 +37,8 @@ void s21_remove_matrix(matrix_t *A);
 int s21_the_matrix_sizer(int rows, int columns, matrix_t *result);
 
 int s21_if_matrix_legit(const matrix_t *matr);
-int s21_more_presice_check(const matrix_t *matr); int s21_if_matrix_rows_legit(const matrix_t *matr);
+int s21_more_presice_check(const matrix_t *matr);
+int s21_if_matrix_rows_legit(const matrix_t *matr);
 int s21_if_matrix_legit_complex(const matrix_t *matr);
 
 int s21_if_double_legit(double a);
