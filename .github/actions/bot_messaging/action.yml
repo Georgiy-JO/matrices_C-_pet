@@ -17,7 +17,7 @@ runs:
   steps:
     - name: Creating empty comment file if needed
       shell: bash
-      run: echo "" >> src/VAR.txt
+      run: echo "" >> VAR.txt
 
     - name: Sending message
       shell: bash

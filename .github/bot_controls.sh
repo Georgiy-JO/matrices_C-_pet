@@ -1,5 +1,5 @@
 #!/bin/bash 
-VAR_file="src/VAR.txt"
+VAR_file="VAR.txt"
 VAR_comment=$(cat $VAR_file)
 VAR_bot_api_token=$BOT_URL_API_TOKEN
 VAR_bot_chat_ID=$CHAT_ID
