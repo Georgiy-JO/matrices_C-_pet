@@ -149,3 +149,10 @@ rebuild_report: clear gcov_report
 
 
 .PHONY: test $(LIB_NAME) gcov_report clean all 
+
+
+
+CPP_SRC= src/try.cpp
+
+try: $(BUILD_DIR) $(CPP_SRC) 
+	g++ $(CPP_SRC) -o $(BUILD_DIR)/output
