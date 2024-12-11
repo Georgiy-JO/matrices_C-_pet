@@ -1,10 +1,9 @@
 name: Self-hosted CI
 
-# Controls when the workflow will run
 on:
-  # push:                                         # pause the automatic CICD run
+  push:                                         # unpause the automatic CICD run
     # branches: [ "develop" ]
-  workflow_dispatch: #for manual starts
+  workflow_dispatch:
 
 
 jobs:
@@ -168,10 +167,11 @@ jobs:
         run: |
           make test > RESULT_TEST.txt || true
           cat RESULT_TEST.txt
-          grep "Checks" RESULT_TEST.txt >> VAR.txt
-          if [ $(grep -oP "[0-9]+%" VAR.txt) != "100%" ]; then
+          grep -oP '\d+ FAILED TESTS?' RESULT_TEST.txt >> VAR.txt
+          if [ -s VAR.txt ]; then
             exit 1
           fi
+          echo "All tests passed" >  VAR.txt
 
       - name: Sending bot message
         if: always()

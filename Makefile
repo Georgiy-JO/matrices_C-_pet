@@ -1,15 +1,15 @@
 OS=$(shell uname)
-CC = gcc
+CC = g++
 
 # Flags
-MAIN_FLAGS = -std=c11
+MAIN_FLAGS = -std=c++17
 DEBUG_FLAGS = -Wall -Wextra -Werror
 VALG_FLAGS = -g
 POSIX_FLAG = -D_POSIX_C_SOURCE=201706L
 COVLAGS =-fprofile-arcs -ftest-coverage
-CHLIB = -lcheck
-MATHLIB = -lm
-LIBFLAGS= $(CHLIB) $(MATHLIB)
+CHLIB = -L/usr/lib/ -lgtest -lgtest_main -pthread #-Wl,--no-warn-search-mismatch
+MATHLIB = -lm 
+LIBFLAGS= $(CHLIB) #$(MATHLIB)
 ifeq ($(OS), Linux)
 	CHLIB += -lsubunit
 endif
@@ -29,21 +29,20 @@ VALG_FILE = $(BUILD_DIR)/RESULT_VALGRIND.txt
 CPPCHECK_FILE = $(BUILD_DIR)/RESULT_CPPCHECK.txt
 
 # main files 
-# SRC_FILES = $(shell find . ! -path './tests/*' -type  f -name '*.c')			# for dif file conf
-SRC_FILES = $(shell find $(SRC_DIR)/ -type  f -name '*.c')
-HEAD_FILES = $(shell find $(SRC_DIR)/ -type f -name '*.h')
-OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_FILES:.c=.o)))
+SRC_FILES = $(shell find $(SRC_DIR)/ -type  f -name '*.cpp')
+HEAD_FILES = $(shell find $(SRC_DIR)/ -type f -name '*.hpp')
+OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC_FILES:.cpp=.o)))
 
 # test files
-TEST_SRC_FILES = $(shell find $(TEST_DIR)/ -type f -name '*.c')
-TEST_OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(TEST_SRC_FILES:.c=.o)))
-TEST_EXEC = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SRC_FILES:.c=)))
-TEST_COV_OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(TEST_SRC_FILES:.c=.cov.o)))
-TEST_COV_EXEC = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SRC_FILES:.c=_cov)))
+TEST_SRC_FILES = $(shell find $(TEST_DIR)/ -type f -name '*.cpp')
+TEST_OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(TEST_SRC_FILES:.cpp=.o)))
+TEST_EXEC = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SRC_FILES:.cpp=)))
+TEST_COV_OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(TEST_SRC_FILES:.cpp=.cov.o)))
+TEST_COV_EXEC = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SRC_FILES:.cpp=_cov)))
 
 # lib files		(unique for a project)
-PROJECT_NAME=s21_matrix
-MAIN_HEADER=$(SRC_DIR)/$(PROJECT_NAME:=.h)
+PROJECT_NAME=s21_matrix_oop
+MAIN_HEADER=$(SRC_DIR)/$(PROJECT_NAME:=.hpp)
 LIB_NAME=$(PROJECT_NAME:=.a)
 LIB_COV_NAME=$(PROJECT_NAME:=.cov.a)
 LIB_LOC=$(BUILD_DIR)/$(LIB_NAME)
@@ -84,10 +83,10 @@ test_cov: $(TEST_COV_EXEC)
 
 
 # object files
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.cpp
 	@$(CC) $(MAIN_FLAGS) -c $< -o $@
 
-$(OBJ_DIR)/%.o: */%.c
+$(OBJ_DIR)/%.o: */%.cpp
 	@$(CC) $(MAIN_FLAGS) -c $< -o $@
 
 
@@ -112,13 +111,13 @@ clang_all:
 
 clang_check:
 	@$(CLANG) -n $(HEAD_FILES) $(SRC_FILES) $(TEST_SRC_FILES) $(MAIN_HEADER)
-	$(CLANG) -n $(shell find . -type f -name '*.c' -o -name '*.h')
+	$(CLANG) -n $(shell find . -type f -name '*.cpp' -o -name '*.hpp')
 
 valgrind_me: $(TEST_EXEC)
 	$(VALG)$(TEST_EXEC)
 
 cpp_check:
-	$(CPPCHECK) $(shell find $(TEST_DIR) $(SRC_DIR) -type f \( -name '*.c' -o -name '*.h' \))
+	$(CPPCHECK) $(shell find $(TEST_DIR) $(SRC_DIR) -type f \( -name '*.cpp' -o -name '*.hpp' \))
 
 
 # service
@@ -147,12 +146,4 @@ rebuild_test_cov: clear test_cov
 rebuild_report: clear gcov_report
 
 
-
 .PHONY: test $(LIB_NAME) gcov_report clean all 
-
-
-
-CPP_SRC= src/try.cpp
-
-try: $(BUILD_DIR) $(CPP_SRC) 
-	g++ $(CPP_SRC) -o $(BUILD_DIR)/output
