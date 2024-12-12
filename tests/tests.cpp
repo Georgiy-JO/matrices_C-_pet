@@ -931,9 +931,46 @@ TEST(MatrixTest, numMULT_EQoperator_Exception){
   S21Matrix matrix2;
   EXPECT_THROW(matrix2*=e,MatrixSetError);
 }
-
-
-
+TEST(MatrixTest, Indexation_get){
+  double ar[]{1.1,      2,      3,  8.9,
+            4.005,  5.666,      6,   -5,
+         7.000001,      8,      9,  999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  EXPECT_EQ(matrix(0,0),1.1);
+  EXPECT_EQ(matrix(0,1),2);
+  EXPECT_EQ(matrix(0,2),3);
+  EXPECT_EQ(matrix(0,3),8.9);
+  EXPECT_EQ(matrix(2,2),9);
+}
+TEST(MatrixTest, Indexation_set){
+  double ar[]{1.1,      2,      3,  8.9,
+            4.005,  5.666,      6,   -5,
+         7.000001,      8,      9,  999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  EXPECT_EQ(matrix(2,2),9);
+  matrix(2,2)=1000;
+  EXPECT_EQ(matrix(2,2),1000);
+  matrix(1,1)=0.7;
+  EXPECT_EQ(matrix(1,1),0.7);
+}
+TEST(MatrixTest, Indexation_Exception){
+  double ar[]{1.1,      2,      3,  8.9,
+            4.005,  5.666,      6,   -5,
+         7.000001,      8,      9,  999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  EXPECT_THROW(matrix(0,0)=INFINITY,DataError);
+  EXPECT_THROW(matrix(8,0)=INFINITY,OutOfRangeError);
+  EXPECT_THROW(matrix(-8,0)=INFINITY,OutOfRangeError);
+  S21Matrix matrix2;
+  EXPECT_THROW(matrix2(0,0),MatrixSetError);
+  EXPECT_THROW(matrix2(0,0)=5,MatrixSetError);
+}
 
 
 

@@ -223,10 +223,10 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const{
 // } 
 
 S21Matrix::MatrixElement S21Matrix::operator()(const int row, const int col) const{
-    if(row<0 ||col<0||row>=rows_||col>=cols_)
-        throw OutOfRangeError();
     if(!matrix_)
         throw MatrixSetError();
+    if(row<0 ||col<0||row>=rows_||col>=cols_)
+        throw OutOfRangeError();
     return MatrixElement(*this,row,col);
 }
 
