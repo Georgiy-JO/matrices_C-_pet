@@ -17,7 +17,7 @@ class S21Matrix : public MatrixService {
         void freeMatrixPart(const int n)noexcept;
         void freeMatrix()noexcept{freeMatrixPart(rows_);}
         void setNullMatrix()noexcept;
-        S21Matrix matrixSunSub(const S21Matrix& other, SumSub mod ) const;
+        S21Matrix matrixSumSub(const S21Matrix& other, SumSub mod ) const;
 
 
         class MatrixElement{
@@ -48,7 +48,6 @@ class S21Matrix : public MatrixService {
         const double** getMatrix() const noexcept{return const_cast<const double**> (matrix_);} //dangerous one
         double getElement(const int row, const int col) const;
         std::unique_ptr<double[]> getArrayFromMatrix() const;
-
         void setElement(const int row, const int col, const double value);
         void setMatrix(const int n, const double array[]);
         void setRows(const int rows){setDimentions(rows,cols_);}
@@ -61,7 +60,7 @@ class S21Matrix : public MatrixService {
 
         // service methods
         bool matrixDimentionEq(const S21Matrix& other) const;
-        void print_matrix() const; // Print the matrix to the console.
+        void print_matrix() const noexcept; // Print the matrix to the console.
         void replaceMatrix(S21Matrix& other)noexcept;
 
         // methods
@@ -92,8 +91,8 @@ class S21Matrix : public MatrixService {
         MatrixElement operator()(const int row, const int col) const; // Indexation by matrix elements (row, column).   // Index is outside the matrix. 
         bool operator==(const S21Matrix& other) const{return this->EqMatrix(other);}// Checks for matrices equality (`EqMatrix`). 
         S21Matrix& operator=(const S21Matrix& other)noexcept;// Assignment of values from one matrix to another one.
-        S21Matrix operator+(const S21Matrix& other) const{ return matrixSunSub(other,SumSub::Sum);} // Addition of two matrices.    //Different matrix dimensions.   
-        S21Matrix operator-(const S21Matrix& other) const{return matrixSunSub(other,SumSub::Sub);} // Subtraction of one matrix from another.     //Different matrix dimensions.      
+        S21Matrix operator+(const S21Matrix& other) const{ return matrixSumSub(other,SumSub::Sum);} // Addition of two matrices.    //Different matrix dimensions.   
+        S21Matrix operator-(const S21Matrix& other) const{return matrixSumSub(other,SumSub::Sub);} // Subtraction of one matrix from another.     //Different matrix dimensions.      
         S21Matrix& operator+=(const S21Matrix& other){
             this->SumMatrix(other);   
             return *this;
@@ -104,7 +103,13 @@ class S21Matrix : public MatrixService {
         } // Difference assignment (`SubMatrix`)       //different matrix dimensions. 
         S21Matrix operator*(const S21Matrix& other) const;  //Matrix multiplication        //The number of columns of the first matrix does not equal the number of rows of the second matrix.
         S21Matrix operator*(const double num) const;          // Multiplication of a matrix by a number.
-        template <typename T> 
-        S21Matrix& operator*=(const T& other);// Multiplication assignment (`MulMatrix`/`MulNumber`).  //-  The number of columns of the first matrix does not equal the number of rows of the second matrix.
-};
+        S21Matrix& operator*=(const S21Matrix& other){
+            this->MulMatrix(other);
+            return *this;              
+        }// Multiplication assignment (`MulMatrix`/`MulNumber`).  //-  The number of columns of the first matrix does not equal the number of rows of the second matrix.
+        S21Matrix& operator*=(const double other){
+            this->MulNumber(other);
+            return *this;           
+        }
+};      
 #endif // MATRIX_CPP_H

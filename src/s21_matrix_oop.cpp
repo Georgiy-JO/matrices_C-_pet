@@ -1,7 +1,6 @@
 #include "s21_matrix_oop.hpp"
 #include "matrix_exceptions.hpp"
 
-
 S21Matrix::S21Matrix(const int rows, const int cols){
     
     if (rows <= 0 || cols <= 0) 
@@ -147,6 +146,7 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other)noexcept{
     }
     return *this;
 }
+
 void S21Matrix::replaceMatrix(S21Matrix& other)noexcept{
     this->~S21Matrix();
     this->rows_=other.rows_;
@@ -155,7 +155,7 @@ void S21Matrix::replaceMatrix(S21Matrix& other)noexcept{
     other.setNullMatrix();
 }
 
-S21Matrix S21Matrix::matrixSunSub(const S21Matrix& other, SumSub mod) const{    //check??
+S21Matrix S21Matrix::matrixSumSub(const S21Matrix& other, SumSub mod) const{    //check??
     S21Matrix result;
     if(!matrixDimentionEq(other) )
         throw DimentionEqualityError();
@@ -202,6 +202,8 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const{
         for (int j = 0; j < result.cols_; j++) {
             result.matrix_[i][j] = 0;
             for (int k = 0; k < cols_; k++) {
+                doubleLegit(this->matrix_[i][j]);
+                doubleLegit(other.matrix_[i][j]);
                 result.matrix_[i][j] += ((matrix_[i][k]) * (other.matrix_[k][j]));
             }
         }
@@ -209,17 +211,16 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const{
     return result;    
 }
 
-template <typename T>       
-S21Matrix& S21Matrix::operator*=(const T& other){       //check!!!
-    std::variant< double, S21Matrix> v{other};
-    switch (v.index()) {
-        case 0: this->MulNumber(other); break;
-        case 1: this->MulMatrix(other); break;
-        default: throw InputError();
-    }
-    return *this;
-
-} 
+// template <typename T>       //sad
+// S21Matrix& S21Matrix::operator*=(const T& other){       
+//     std::variant< double, S21Matrix> v{other};
+//     switch (v.index()) {
+//         case 0: this->MulNumber(other); break;
+//         case 1: this->MulMatrix(other); break;
+//         default: throw InputError();
+//     }
+//     return *this;
+// } 
 
 S21Matrix::MatrixElement S21Matrix::operator()(const int row, const int col) const{
     if(row<0 ||col<0||row>=rows_||col>=cols_)
@@ -237,7 +238,7 @@ double S21Matrix::MatrixElement::operator=(const double input){     //check!!!!!
     return input;
 }
 
-void S21Matrix::print_matrix() const{
+void S21Matrix::print_matrix() const noexcept{
     using std::cout,std::endl;
     if(!matrix_)  cout<<nullptr<<endl;
     else{
