@@ -74,6 +74,10 @@ TEST(MatrixTest, setMatrix_Exception){
   EXPECT_THROW (matrix_1.setMatrix(-5,ar),InputError);
   EXPECT_THROW (matrix_1.setMatrix(20,ar),OutOfRangeError);
   EXPECT_THROW (matrix_1.setMatrix(17,ar),OutOfRangeError);
+  ar[5]=NAN;
+  EXPECT_THROW (matrix_1.setMatrix(16,ar),DataError);
+  ar[5]=INFINITY;
+  EXPECT_THROW (matrix_1.setMatrix(16,ar),DataError);
   double* ar_2=nullptr;
   EXPECT_THROW (matrix_1.setMatrix(5,ar_2),InputError);
 }
@@ -187,6 +191,9 @@ TEST(MatrixTest, setElement_Exception){
   EXPECT_THROW(matrix.setElement(5,2,10),OutOfRangeError);
   EXPECT_THROW(matrix.setElement(3,2,10),OutOfRangeError);
   EXPECT_THROW(matrix.setElement(2,-2,10),OutOfRangeError);
+  EXPECT_THROW(matrix.setElement(1,1,NAN),DataError);
+  EXPECT_THROW(matrix.setElement(1,1,INFINITY),DataError);
+
 }
 TEST(MatrixTest, setElement){
   double ar[]{1,2,3,8,
@@ -281,8 +288,153 @@ TEST(MatrixTest, setFull){
   EXPECT_EQ(matrix.getRows(),a);
   EXPECT_EQ(matrix.getCols(),b);
 }
+TEST(MatrixTest, matrixDimentionEq){
+  double ar[]{1,2,3,8,
+              4,5,6,-5,
+              7,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  S21Matrix matrix2(a,b);
+  S21Matrix matrix3(b,a);
+  S21Matrix matrix5(a,a);
+  EXPECT_EQ(matrix.matrixDimentionEq(matrix2),true);
+  EXPECT_EQ(matrix.matrixDimentionEq(matrix3),false);
+  EXPECT_EQ(matrix.matrixDimentionEq(matrix5),false);
+}
+TEST(MatrixTest, matrixDimentionEq_Exception){
+  double ar[]{1,2,3,8,
+              4,5,6,-5,
+              7,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  S21Matrix matrix4;
+  EXPECT_THROW(matrix.matrixDimentionEq(matrix4),MatrixSetError);
+}
+TEST(MatrixTest, doubleServiceMethods){
+  double a=0.00000001, b=0, c=5.0,d=5, e=NAN,f=INFINITY;
+  EXPECT_EQ(MatrixService::doubleEq(a,b),true);
+  EXPECT_EQ(MatrixService::doubleEq(a,c),false);
+  EXPECT_EQ(MatrixService::doubleEq(c,d),true);
+  EXPECT_EQ(MatrixService::doubleEqComplex(a,b),true);
+  EXPECT_EQ(MatrixService::doubleEqComplex(a,c),false);
+  EXPECT_EQ(MatrixService::doubleEqComplex(c,d),true);
+  EXPECT_THROW(MatrixService::doubleEqComplex(e,d),DataError);
+  EXPECT_THROW(MatrixService::doubleEqComplex(-f,-f),DataError);
+  EXPECT_THROW(MatrixService::doubleEqComplex(f,f),DataError);
+  EXPECT_EQ(MatrixService::doubleEqComplex(f,-f),false);
+  EXPECT_EQ(MatrixService::doubleEqComplex(-f,f),false);
+  EXPECT_EQ(MatrixService::doubleEqComplex(c,-f),false);
+  EXPECT_EQ(MatrixService::doubleEqComplex(f,a),false);
+  EXPECT_EQ(MatrixService::doubleEqComplex(a,f),false);
+  EXPECT_NO_THROW(MatrixService::doubleEqComplex(f,a));
+  EXPECT_NO_THROW(MatrixService::doubleEqComplex(a,f));
+  EXPECT_NO_THROW(MatrixService::doubleLegit(a));
+  EXPECT_NO_THROW(MatrixService::doubleLegit(b));
+  EXPECT_NO_THROW(MatrixService::doubleLegit(c));
+  EXPECT_NO_THROW(MatrixService::doubleLegit(d));
+  EXPECT_THROW(MatrixService::doubleLegit(e),DataError);
+  EXPECT_THROW(MatrixService::doubleLegit(f),DataError);
+  EXPECT_THROW(MatrixService::doubleLegit(-f),DataError);
+}
+TEST(MatrixTest, EqMatrix){
+  double ar[]{1,2,3,8,
+              4,5,6,-5,
+              7,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  S21Matrix matrix2(a,b,n,ar);
+  EXPECT_EQ(matrix.EqMatrix(matrix2),true);
+  ar[3]=100;
+  ar[14]=5.5;
+  matrix2.setFull(a,b,n,ar);
+  EXPECT_EQ(matrix.EqMatrix(matrix2),false);
+  matrix2.setFull(b,b,n,ar);
+  EXPECT_EQ(matrix.EqMatrix(matrix2),false);
+  matrix.setFull(b,b,n,ar);
+  EXPECT_EQ(matrix2.EqMatrix(matrix),true);
+}
+TEST(MatrixTest, operatorEQ){
+  double ar[]{1,2,3,8,
+              4,5,6,-5,
+              7,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  S21Matrix matrix2(a,b,n,ar);
+  EXPECT_EQ((matrix==matrix2),true);
+  ar[3]=100;
+  ar[14]=5.5;
+  matrix2.setFull(a,b,n,ar);
+  EXPECT_EQ((matrix==matrix2),false);
+  matrix2.setFull(b,b,n,ar);
+  EXPECT_EQ((matrix==matrix2),false);
+  matrix.setFull(b,b,n,ar);
+  EXPECT_EQ((matrix2==matrix),true);
+}
+TEST(MatrixTest, SumMatrix){
+  double ar[]{1.1,2,3,8.9,
+              4.005,5.666,6,-5,
+              7.000001,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  double ar2[]{55.5, 32.0, -555, -7.777,
+                123, 323.22, 123.55, 5555.5,
+                  -0.1, -55.55, -0.0001, 12};
+  n=sizeof(ar2)/sizeof(ar2[0]);
+  S21Matrix matrix2(a,b,n,ar2);
+  for(int i=0;i<a*b;i++)
+    ar[i]+=ar2[i];
+  matrix.SumMatrix(matrix2);
+  std::unique_ptr<double[]> ar3= matrix.getArrayFromMatrix();
+  for(int i=0;i<a*b;i++)
+    EXPECT_EQ(ar[i],ar3[i]);
+  matrix.print_matrix();
+}
+TEST(MatrixTest, SumMatrix_Exception){
+  double ar[]{1.1,2,3,8.9,
+              4.005,5.666,6,-5,
+              7.000001,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix(a,b,n,ar);
+  S21Matrix matrix2(a,a);
+  EXPECT_THROW(matrix.SumMatrix(matrix2),DimentionEqualityError);
+  ar[2]=NAN;
+  matrix2.setFull(a,b,n,ar);
+  EXPECT_THROW(matrix.SumMatrix(matrix2),DataError);
+}
 
 
+
+
+
+
+
+
+
+
+/*
+TEST(MatrixTest, setFull){
+  double ar[]{1,2,3,8,
+              4,5,6,-5,
+              7,8,9,999};
+  int n=sizeof(ar)/sizeof(ar[0]);
+  int a=3,b=4;
+  S21Matrix matrix;
+  matrix.setFull(a,b,n,ar);
+  EXPECT_EQ(matrix.getElement(2,2),9);
+  EXPECT_EQ(matrix.getElement(0,3),8);
+  EXPECT_EQ(matrix.getElement(2,0),7);
+  EXPECT_EQ(matrix.getElement(2,3),999);
+  EXPECT_EQ(matrix.getRows(),a);
+  EXPECT_EQ(matrix.getCols(),b);
+  EXPECT_THROW(matrix.setDimentions(-5,2),OutOfRangeError);
+}
+*/
 
 
 

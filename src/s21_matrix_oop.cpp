@@ -36,8 +36,7 @@ void S21Matrix::freeMatrixPart(const int n) noexcept{
 
 S21Matrix::~S21Matrix()noexcept {
     freeMatrix();
-    rows_=0;
-    cols_=0;
+    setNullMatrix();
 }  
 
 S21Matrix::S21Matrix(const S21Matrix& other) noexcept :S21Matrix(other.rows_,other.cols_){
@@ -59,6 +58,7 @@ void S21Matrix::setElement(const int row, const int col, const double value){
         throw OutOfRangeError();
     if(!matrix_)
         throw MatrixSetError();
+    doubleLegit(value);
     matrix_[row][col]=value;
 }
 
@@ -72,7 +72,12 @@ void S21Matrix::setMatrix(const int n, const double array[]){
     
     for(int i=0,k=0;i<rows_;i++){
         for(int j=0;j<cols_;j++,k++){
-            matrix_[i][j]=(k<n)?array[k]:0;
+            if(k<n){
+                doubleLegit(array[k]);
+                matrix_[i][j]=array[k];
+            }
+            else 
+                matrix_[i][j]=0;
         }
     }    
 }
@@ -103,30 +108,146 @@ void S21Matrix::setDimentions(const int rows, const int columns){
                     matrix2.setElement(i,j,0);
             }
         }
-        this->~S21Matrix();
-        this->rows_=matrix2.rows_;
-        this->cols_=matrix2.cols_;
-        this->matrix_=matrix2.matrix_;
-        matrix2.rows_=0;
-        matrix2.cols_=0;
-        matrix2.matrix_=nullptr;
+        replaceMatrix(matrix2);
     }
 }
 
-S21Matrix::S21Matrix(S21Matrix&& other) noexcept 
-: rows_(other.rows_), cols_(other.cols_), matrix_(other.matrix_) {
-    other.rows_ = 0;
-    other.cols_ = 0;
-    other.matrix_ = nullptr;
+bool S21Matrix::EqMatrix(const S21Matrix& other) const{
+    bool output=matrixDimentionEq(other);
+    for(int i=0;output && i<rows_;i++){
+        for(int j=0;output && j<cols_;j++){
+            if(matrix_[i][j]!=other.matrix_[i][j])
+                output=doubleEqComplex(matrix_[i][j],other.matrix_[i][j]);
+        }
+    }
+    return output;
 }
 
+bool S21Matrix::matrixDimentionEq(const S21Matrix& other) const{
+    if(!matrix_ || !other.matrix_)
+        throw MatrixSetError();
+    return ((rows_ == other.rows_) && (cols_ == other.cols_));
+}
 
+void S21Matrix::setNullMatrix()noexcept{
+    rows_=0;
+    cols_=0;
+    matrix_=nullptr;
+}
 
+S21Matrix& S21Matrix::operator=(const S21Matrix& other)noexcept{
+    if(this!=&other){
+        this->~S21Matrix();
+        this->setDimentions(other.rows_, other.cols_);
+        for(int i=0;i<rows_;i++){
+            for(int j=0;j<cols_;j++){
+                this->matrix_[i][j]=other.matrix_[i][j];
+            }
+        }
+    }
+    return *this;
+}
+void S21Matrix::replaceMatrix(S21Matrix& other)noexcept{
+    this->~S21Matrix();
+    this->rows_=other.rows_;
+    this->cols_=other.cols_;
+    this->matrix_=other.matrix_;
+    other.setNullMatrix();
+}
 
+S21Matrix S21Matrix::matrixSunSub(const S21Matrix& other, SumSub mod) const{    //check??
+    S21Matrix result;
+    if(!matrixDimentionEq(other) )
+        throw DimentionEqualityError();
+    result.setDimentions(this->rows_,this->cols_);
+    for(int i=0;i<rows_;i++){
+        for(int j=0;j<cols_;j++){
+            doubleLegit(this->matrix_[i][j]);
+            doubleLegit(other.matrix_[i][j]);
+            switch(mod){
+                case SumSub::Sum:
+                    result.matrix_[i][j]=this->matrix_[i][j]+other.matrix_[i][j];
+                    break;
+                case SumSub::Sub:
+                    result.matrix_[i][j]=this->matrix_[i][j]-other.matrix_[i][j];
+                    break;
+            }
+        }
+    }
+    
+    return result;
+}
 
+S21Matrix S21Matrix::operator*(const double num) const{
+    if(!matrix_)
+        throw MatrixSetError();
+    doubleLegit(num);
+    S21Matrix result=*this;
+    for(int i=0;i<result.rows_;i++){
+        for(int j=0;j<result.cols_;j++){
+            doubleLegit(result.matrix_[i][j]);
+            result.matrix_[i][j]=result.matrix_[i][j]*num;
+        }
+    }
+    return result;
+}
 
+S21Matrix S21Matrix::operator*(const S21Matrix& other) const{
+    if(!matrix_||!other.matrix_)
+        throw MatrixSetError();
+    if(cols_!=other.rows_)
+        throw DimentionAlignmentError();
+    S21Matrix result(rows_,other.cols_);
+    for (int i = 0; i < result.rows_; i++) {
+        for (int j = 0; j < result.cols_; j++) {
+            result.matrix_[i][j] = 0;
+            for (int k = 0; k < cols_; k++) {
+                result.matrix_[i][j] += ((matrix_[i][k]) * (other.matrix_[k][j]));
+            }
+        }
+    }
+    return result;    
+}
 
+template <typename T>       
+S21Matrix& S21Matrix::operator*=(const T& other){       //check!!!
+    std::variant< double, S21Matrix> v{other};
+    switch (v.index()) {
+        case 0: this->MulNumber(other); break;
+        case 1: this->MulMatrix(other); break;
+        default: throw InputError();
+    }
+    return *this;
 
+} 
+
+S21Matrix::MatrixElement S21Matrix::operator()(const int row, const int col) const{
+    if(row<0 ||col<0||row>=rows_||col>=cols_)
+        throw OutOfRangeError();
+    if(!matrix_)
+        throw MatrixSetError();
+    return MatrixElement(*this,row,col);
+}
+
+double S21Matrix::MatrixElement::operator=(const double input){     //check!!!!!
+    if(!ptr)
+        throw MatrixSetError();
+    doubleLegit(input);
+    *ptr=input;
+    return input;
+}
+
+void S21Matrix::print_matrix() const{
+    using std::cout,std::endl;
+    if(!matrix_)  cout<<nullptr<<endl;
+    else{
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) 
+                cout<<matrix_[i][j]<<" ";
+            cout<<endl;
+        }
+    }
+}
 
 
 
