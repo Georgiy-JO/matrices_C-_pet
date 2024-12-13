@@ -18,7 +18,7 @@ class S21Matrix : public MatrixService {
         void freeMatrix()noexcept{freeMatrixPart(rows_);}
         void setNullMatrix()noexcept;
         S21Matrix matrixSumSub(const S21Matrix& other, SumSub mod ) const;
-
+        S21Matrix minorMaker(const int row, const int col) const;
 
         class MatrixElement{
             double* ptr=nullptr;
@@ -81,11 +81,10 @@ class S21Matrix : public MatrixService {
             S21Matrix res((*this)*other);
             this->replaceMatrix(res);
         }  //Multiplies the current matrix by the second matrix.   //The number of columns of the first matrix is not equal to the number of rows of the second matrix.
-        // S21Matrix Transpose() const;                   //Creates a new transposed matrix from the current one and returns it.
-        // S21Matrix CalcComplements() const;            //Calculates the algebraic addition matrix of the current one and returns it.  //The matrix is not square.    
-        // double Determinant() const;                    //Calculates and returns the determinant of the current matrix.                //The matrix is not square.    
-        // S21Matrix InverseMatrix() const;               //Calculates and returns the inverse matrix.                                   //Matrix determinant is 0. 
-
+        S21Matrix Transpose() const;                   //Creates a new transposed matrix from the current one and returns it.
+        S21Matrix CalcComplements() const;            //Calculates the algebraic addition matrix of the current one and returns it.  //The matrix is not square.    
+        double Determinant() const;                    //Calculates and returns the determinant of the current matrix.                //The matrix is not square.    
+        S21Matrix InverseMatrix() const;               //Calculates and returns the inverse matrix.                                   //Matrix determinant is 0. 
 
         // operators overload
         MatrixElement operator()(const int row, const int col) const; // Indexation by matrix elements (row, column).   // Index is outside the matrix. 

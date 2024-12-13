@@ -250,11 +250,69 @@ void S21Matrix::print_matrix() const noexcept{
     }
 }
 
+S21Matrix S21Matrix::Transpose() const{
+    if(!matrix_)
+        throw MatrixSetError();
+    S21Matrix new_matrix(rows_,cols_);
+    for (int i = 0; i < rows_; i++) {
+        for (int j = 0; j < cols_; j++) {
+            new_matrix.matrix_[j][i]=matrix_[i][j];
+        }
+    }
+    return new_matrix;
+}
 
+double S21Matrix::Determinant() const{
+    if(!matrix_)
+        throw MatrixSetError(); 
+    if(rows_!=cols_)
+        throw SquarenessError();
+    double det=0;
+    if(rows_==1)
+        det= matrix_[0][0];
+    else{
+        for(int i=0;i<rows_;i++){
+            doubleLegit(matrix_[0][i]);
+            det=pow(-1,i)*matrix_[0][i]*minorMaker(0,i).Determinant();
+        }
+    }
+    return det;
+}
 
+S21Matrix S21Matrix::minorMaker(const int row, const int col) const{
+    if(!matrix_)
+        throw MatrixSetError(); 
+    if (row<0 || col<0 ||row>=rows_||col>=cols_)
+        throw OutOfRangeError();
+    int n=(rows_-1)*(cols_-1);
+    double ar[n]{0};
+    for(int i=0, k=0;i<rows_;i++){
+        for(int j=0;j<cols_;j++){
+            if(i!=row && j!=col)
+                ar[k++]=matrix_[i][j];
+        }
+    }
+    return S21Matrix(rows_-1,cols_-1,n,ar);
+}
 
+S21Matrix S21Matrix::CalcComplements() const{
+    if(!matrix_)
+        throw MatrixSetError(); 
+    if(rows_!=cols_)
+        throw SquarenessError();
+    S21Matrix new_matrix(rows_,cols_);
+    for(int i=0;i<rows_;i++){
+        for(int j=0;j<cols_;j++)
+            new_matrix.matrix_[i][j]=minorMaker(i,j).Determinant()*pow(-1,(i+j));
+    }
+    return new_matrix;
+}
 
-
-
-
+S21Matrix S21Matrix::InverseMatrix() const{
+    double inverse_determinamt=Determinant();   
+    if (inverse_determinamt==0)
+        throw NonInvertibleError();
+    inverse_determinamt=1.0/inverse_determinamt;
+    return CalcComplements().Transpose()*inverse_determinamt;
+}
 

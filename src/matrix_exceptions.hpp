@@ -37,9 +37,13 @@ class MatrixSetError:public MatrixError{
     public:
     MatrixSetError(const char* error="Matrix not set or does not exist."): MatrixError(error){}
 };
-class TEMPError:public MatrixError{
+class SquarenessError:public MatrixError{
     public:
-    TEMPError(const char* error="Temple error"): MatrixError(error){}
+    SquarenessError(const char* error="The matrix is not square"): MatrixError(error){}
+};
+class NonInvertibleError:public MatrixError{
+    public:
+    NonInvertibleError(const char* error="The matrix is not invertable:the determinant is zero."): MatrixError(error){}
 };
 class InputError:public MatrixError{
     public:
