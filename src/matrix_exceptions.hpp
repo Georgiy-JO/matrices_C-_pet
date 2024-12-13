@@ -3,7 +3,8 @@
 
 /**
  * @brief Base class for matrix-related exceptions.
- * @note This class extends std::exception to provide a custom error message for matrix-related errors.
+ * @note This class extends std::exception to provide a custom error message for
+ * matrix-related errors.
  */
 class MatrixError : public std::exception {
   std::string msg;
@@ -31,7 +32,8 @@ class MatrixError : public std::exception {
 /**
  * @brief Exception for matrix dimension errors.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class DimentionError : public MatrixError {
  public:
@@ -44,19 +46,22 @@ class DimentionError : public MatrixError {
 /**
  * @brief Exception for data-related errors.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class DataError : public MatrixError {
  public:
   DataError(const char* error =
-                "Incorrect data: impossible to input/calculate due to data error (inf, nan, etc).")
+                "Incorrect data: impossible to input/calculate due to data "
+                "error (inf, nan, etc).")
       : MatrixError(error) {}
 };
 
 /**
  * @brief Exception for unequal matrix dimensions.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class DimentionEqualityError : public MatrixError {
  public:
@@ -69,20 +74,23 @@ class DimentionEqualityError : public MatrixError {
 /**
  * @brief Exception for misaligned matrix dimensions.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class DimentionAlignmentError : public MatrixError {
  public:
   DimentionAlignmentError(
       const char* error =
-          "Calculation impossible: the number of columns of the first matrix does not equal the number of rows of the second matrix.")
+          "Calculation impossible: the number of columns of the first matrix "
+          "does not equal the number of rows of the second matrix.")
       : MatrixError(error) {}
 };
 
 /**
  * @brief Exception for memory allocation failures.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class MemoryAllocationError : public MatrixError {
  public:
@@ -95,20 +103,22 @@ class MemoryAllocationError : public MatrixError {
 /**
  * @brief Exception for out-of-range access.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class OutOfRangeError : public MatrixError {
  public:
-  OutOfRangeError(
-      const char* error =
-          "Out of range error: you are trying to reach an element out of matrix bounds.")
+  OutOfRangeError(const char* error =
+                      "Out of range error: you are trying to reach an element "
+                      "out of matrix bounds.")
       : MatrixError(error) {}
 };
 
 /**
  * @brief Exception for uninitialized or invalid matrices.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class MatrixSetError : public MatrixError {
  public:
@@ -119,7 +129,8 @@ class MatrixSetError : public MatrixError {
 /**
  * @brief Exception for non-square matrices.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class SquarenessError : public MatrixError {
  public:
@@ -130,7 +141,8 @@ class SquarenessError : public MatrixError {
 /**
  * @brief Exception for non-invertible matrices.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class NonInvertibleError : public MatrixError {
  public:
@@ -143,7 +155,8 @@ class NonInvertibleError : public MatrixError {
 /**
  * @brief Exception for invalid input parameters or data.
  * @note Thrown when matrix dimensions are invalid (e.g., negative or zero).
- * @details Includes a constructor with a default or custom message. Massege passe to the constructor by c-string parameter "error".
+ * @details Includes a constructor with a default or custom message. Massege
+ * passe to the constructor by c-string parameter "error".
  */
 class InputError : public MatrixError {
  public:

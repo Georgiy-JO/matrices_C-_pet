@@ -1,31 +1,36 @@
 #ifndef MATRIX_SERVICE
 #define MATRIX_SERVICE
 #include <cmath>
+
 #include "matrix_exceptions.hpp"
 
 using std::isinf, std::isnan;
 
 // Represents the value of zero as a double.
-constexpr double DOUBLE_ZERO(0); 
+constexpr double DOUBLE_ZERO(0);
 // Defines a small margin of error for floating-point comparisons.
 constexpr double EPSILON(1e-7);
 
 /**
- * @brief Provides utility methods for matrix-related operations, including comparisons of double values.
+ * @brief Provides utility methods for matrix-related operations, including
+ * comparisons of double values.
  */
 class MatrixService {
  public:
   /**
-   * @brief Compares two double values for equality within a small epsilon margin.
+   * @brief Compares two double values for equality within a small epsilon
+   * margin.
    * @param a The first double value.
    * @param b The second double value.
-   * @return True if the values are equal within the epsilon margin, false otherwise.
+   * @return True if the values are equal within the epsilon margin, false
+   * otherwise.
    */
   inline static bool doubleEq(const double& a, const double& b) noexcept {
     return fabs(a - b) < EPSILON;
   }
   /**
-   * @brief Compares two double values for equality, considering complex cases like NaN and infinity.
+   * @brief Compares two double values for equality, considering complex cases
+   * like NaN and infinity.
    * @param a The first double value.
    * @param b The second double value.
    * @return True if the values are considered equal, false otherwise.
