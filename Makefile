@@ -60,7 +60,8 @@ all: $(LIB_NAME)
 # library
 $(LIB_NAME): clear_o $(OBJ_DIR) $(OBJ_FILES)
 	ar rcs $@ $(OBJ_FILES)
-	@mv $(LIB_NAME) $(LIB_LOC)    
+	@mv $(LIB_NAME) $(LIB_LOC)
+	@cp $(MAIN_HEADER) $(BUILD_DIR)
 
 $(LIB_COV_NAME): clear_o $(OBJ_DIR) $(OBJ_FILES)
 	ar rcs $@ $(OBJ_FILES)            
