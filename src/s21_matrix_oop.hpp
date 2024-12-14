@@ -19,7 +19,7 @@ enum class SumSub { Sum, Sub };
  * @note Methods without "noexcept" keyword include verios of throws.
  * @see matrix_exceptions.hpp
  */
-class S21Matrix : public MatrixService {
+class S21Matrix {
  private:
   int rows_{0}, cols_{0};  ///< Number of rows and columns in the matrix.
   double** matrix_ =

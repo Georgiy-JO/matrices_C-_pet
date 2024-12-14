@@ -15,8 +15,7 @@ constexpr double EPSILON(1e-7);
  * @brief Provides utility methods for matrix-related operations, including
  * comparisons of double values.
  */
-class MatrixService {
- public:
+namespace MatrixService {
   /**
    * @brief Compares two double values for equality within a small epsilon
    * margin.
@@ -51,5 +50,5 @@ class MatrixService {
   inline static void doubleLegit(const double& a) {
     if (isnan(a) || isinf(a)) throw DataError();
   }
-};
+}
 #endif  // MATRIX_SERVICE

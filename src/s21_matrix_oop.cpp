@@ -54,7 +54,7 @@ void S21Matrix::setElement(const int row, const int col, const double value) {
   if (row >= rows_ || col >= cols_ || row < 0 || col < 0)
     throw OutOfRangeError();
   if (!matrix_) throw MatrixSetError();
-  doubleLegit(value);
+  MatrixService::doubleLegit(value);
   matrix_[row][col] = value;
 }
 
@@ -66,7 +66,7 @@ void S21Matrix::setMatrix(const int n, const double array[]) {
   for (int i = 0, k = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++, k++) {
       if (k < n) {
-        doubleLegit(array[k]);
+        MatrixService::doubleLegit(array[k]);
         matrix_[i][j] = array[k];
       } else
         matrix_[i][j] = 0;
@@ -107,7 +107,7 @@ bool S21Matrix::EqMatrix(const S21Matrix& other) const {
   for (int i = 0; output && i < rows_; i++) {
     for (int j = 0; output && j < cols_; j++) {
       if (matrix_[i][j] != other.matrix_[i][j])
-        output = doubleEqComplex(matrix_[i][j], other.matrix_[i][j]);
+        output = MatrixService::doubleEqComplex(matrix_[i][j], other.matrix_[i][j]);
     }
   }
   return output;
@@ -152,8 +152,8 @@ S21Matrix S21Matrix::matrixSumSub(const S21Matrix& other,
   result.setDimentions(this->rows_, this->cols_);
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
-      doubleLegit(this->matrix_[i][j]);
-      doubleLegit(other.matrix_[i][j]);
+      MatrixService::doubleLegit(this->matrix_[i][j]);
+      MatrixService::doubleLegit(other.matrix_[i][j]);
       switch (mod) {
         case SumSub::Sum:
           result.matrix_[i][j] = this->matrix_[i][j] + other.matrix_[i][j];
@@ -170,11 +170,11 @@ S21Matrix S21Matrix::matrixSumSub(const S21Matrix& other,
 
 S21Matrix S21Matrix::operator*(const double num) const {
   if (!matrix_) throw MatrixSetError();
-  doubleLegit(num);
+  MatrixService::doubleLegit(num);
   S21Matrix result = *this;
   for (int i = 0; i < result.rows_; i++) {
     for (int j = 0; j < result.cols_; j++) {
-      doubleLegit(result.matrix_[i][j]);
+      MatrixService::doubleLegit(result.matrix_[i][j]);
       result.matrix_[i][j] = result.matrix_[i][j] * num;
     }
   }
@@ -189,8 +189,8 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const {
     for (int j = 0; j < result.cols_; j++) {
       result.matrix_[i][j] = 0;
       for (int k = 0; k < cols_; k++) {
-        doubleLegit(this->matrix_[i][k]);
-        doubleLegit(other.matrix_[k][j]);
+        MatrixService::doubleLegit(this->matrix_[i][k]);
+        MatrixService::doubleLegit(other.matrix_[k][j]);
         result.matrix_[i][j] += ((matrix_[i][k]) * (other.matrix_[k][j]));
       }
     }
@@ -217,9 +217,9 @@ S21Matrix::MatrixElement S21Matrix::operator()(const int row,
   return MatrixElement(*this, row, col);
 }
 
-double S21Matrix::MatrixElement::operator=(const double input) {  // check!!!!!
+double S21Matrix::MatrixElement::operator=(const double input) { 
   if (!ptr) throw MatrixSetError();
-  doubleLegit(input);
+  MatrixService::doubleLegit(input);
   *ptr = input;
   return input;
 }
@@ -255,7 +255,7 @@ double S21Matrix::Determinant() const {
     det = matrix_[0][0];
   else {
     for (int i = 0; i < rows_; i++) {
-      doubleLegit(matrix_[0][i]);
+      MatrixService::doubleLegit(matrix_[0][i]);
       det += pow(-1, i) * matrix_[0][i] * minorMaker(0, i).Determinant();
     }
   }
