@@ -41,7 +41,7 @@ TEST_COV_OBJ_FILES = $(addprefix $(OBJ_DIR)/, $(notdir $(TEST_SRC_FILES:.cpp=.co
 TEST_COV_EXEC = $(addprefix $(BUILD_DIR)/, $(notdir $(TEST_SRC_FILES:.cpp=_cov)))
 
 # lib files		(unique for a project)
-PROJECT_NAME=s21_matrix_oop
+PROJECT_NAME=matrix_cpp
 MAIN_HEADER=$(SRC_DIR)/$(PROJECT_NAME:=.hpp)
 LIB_NAME=$(PROJECT_NAME:=.a)
 LIB_COV_NAME=$(PROJECT_NAME:=.cov.a)

@@ -19,7 +19,7 @@ enum class SumSub { Sum, Sub };
  * @note Methods without "noexcept" keyword include verios of throws.
  * @see matrix_exceptions.hpp
  */
-class S21Matrix {
+class Matrix {
  private:
   int rows_{0}, cols_{0};  ///< Number of rows and columns in the matrix.
   double** matrix_ =
@@ -50,14 +50,14 @@ class S21Matrix {
    * @param mod Indicates whether to add or subtract.
    * @return Resultant matrix after addition or subtraction.
    */
-  S21Matrix matrixSumSub(const S21Matrix& other, SumSub mod) const;
+  Matrix matrixSumSub(const Matrix& other, SumSub mod) const;
   /**
    * @brief Creates a minor matrix by excluding a specific row and column.
    * @param row The row to exclude.
    * @param col The column to exclude.
    * @return The minor matrix.
    */
-  S21Matrix minorMaker(const int row, const int col) const;
+  Matrix minorMaker(const int row, const int col) const;
 
   /**
    * @brief A helper class to represent an element of the matrix.
@@ -74,7 +74,7 @@ class S21Matrix {
      * @param row Row index of the element.
      * @param col Column index of the element.
      */
-    MatrixElement(const S21Matrix& matrix, const int row,
+    MatrixElement(const Matrix& matrix, const int row,
                   const int col) noexcept
         : ptr{&(matrix.matrix_[row][col])} {}
     /**
@@ -94,13 +94,13 @@ class S21Matrix {
   /**
    * @brief Default constructor.
    */
-  S21Matrix() noexcept : rows_(0), cols_(0), matrix_(nullptr) {}
+  Matrix() noexcept : rows_(0), cols_(0), matrix_(nullptr) {}
   /**
    * @brief Parametrized constructor with dimensions.
    * @param rows Number of rows.
    * @param cols Number of columns.
    */
-  S21Matrix(const int rows, const int cols);
+  Matrix(const int rows, const int cols);
   /**
    * @brief Parametrized constructor with dimensions and values passed as array.
    * @param rows Number of rows.
@@ -108,27 +108,27 @@ class S21Matrix {
    * @param n Number of elements in the array.
    * @param arr Array of values to initialize the matrix.
    */
-  S21Matrix(const int rows, const int cols, const int n, const double arr[])
-      : S21Matrix(rows, cols) {
+  Matrix(const int rows, const int cols, const int n, const double arr[])
+      : Matrix(rows, cols) {
     setMatrix(n, arr);
   }
   /**
    * @brief Copy constructor.
    * @param other The matrix to copy.
    */
-  S21Matrix(const S21Matrix& other) noexcept;
+  Matrix(const Matrix& other) noexcept;
   /**
    * @brief Move constructor.
    * @param other The matrix to move.
    */
-  S21Matrix(S21Matrix&& other) noexcept
+  Matrix(Matrix&& other) noexcept
       : rows_(other.rows_), cols_(other.cols_), matrix_(other.matrix_) {
     other.setNullMatrix();
   }
   /**
    * @brief Destructor.
    */
-  ~S21Matrix() noexcept;
+  ~Matrix() noexcept;
 
   // Getters and setters
   /**
@@ -217,7 +217,7 @@ class S21Matrix {
    * @param other The matrix to compare with.
    * @return True if the dimensions match, false otherwise.
    */
-  bool matrixDimentionEq(const S21Matrix& other) const;
+  bool matrixDimentionEq(const Matrix& other) const;
   /**
    * @brief Prints the matrix to the console.
    */
@@ -226,7 +226,7 @@ class S21Matrix {
    * @brief Replaces the current matrix with another matrix.
    * @param other The matrix to replace with.
    */
-  void replaceMatrix(S21Matrix& other) noexcept;
+  void replaceMatrix(Matrix& other) noexcept;
 
   // methods
   /**
@@ -234,21 +234,21 @@ class S21Matrix {
    * @param other The matrix to compare with.
    * @return True if the matrices are equal, false otherwise.
    */
-  bool EqMatrix(const S21Matrix& other) const;
+  bool EqMatrix(const Matrix& other) const;
   /**
    * @brief Adds another matrix to the current one.
    * @param other The matrix to add.
    */
-  void SumMatrix(const S21Matrix& other) {
-    S21Matrix res(*this + other);
+  void SumMatrix(const Matrix& other) {
+    Matrix res(*this + other);
     this->replaceMatrix(res);
   }
   /**
    * @brief Subtracts another matrix from the current one.
    * @param other The matrix to subtract.
    */
-  void SubMatrix(const S21Matrix& other) {
-    S21Matrix res(*this - other);
+  void SubMatrix(const Matrix& other) {
+    Matrix res(*this - other);
     this->replaceMatrix(res);
   }
   /**
@@ -256,27 +256,27 @@ class S21Matrix {
    * @param num The scalar value to multiply with.
    */
   void MulNumber(const double num) {
-    S21Matrix res((*this) * num);
+    Matrix res((*this) * num);
     this->replaceMatrix(res);
   }
   /**
    * @brief Multiplies the current matrix by another matrix.
    * @param other The matrix to multiply with.
    */
-  void MulMatrix(const S21Matrix& other) {
-    S21Matrix res((*this) * other);
+  void MulMatrix(const Matrix& other) {
+    Matrix res((*this) * other);
     this->replaceMatrix(res);
   }
   /**
    * @brief Transposes the current matrix and returns the result.
    * @return The transposed matrix.
    */
-  S21Matrix Transpose() const;
+  Matrix Transpose() const;
   /**
    * @brief Creates a matrix of complements.
    * @return The matrix of complements.
    */
-  S21Matrix CalcComplements() const;
+  Matrix CalcComplements() const;
   /**
    * @brief Calculates the determinant of the matrix.
    * @return The determinant of the matrix.
@@ -286,7 +286,7 @@ class S21Matrix {
    * @brief Creates an inversed matrix.
    * @return The inversed matrix.
    */
-  S21Matrix InverseMatrix() const;
+  Matrix InverseMatrix() const;
 
   // operators overload
   /**
@@ -300,7 +300,7 @@ class S21Matrix {
    * @param other The matrix to compare with.
    * @return True if the matrices are equal, false otherwise.
    */
-  bool operator==(const S21Matrix& other) const {
+  bool operator==(const Matrix& other) const {
     return this->EqMatrix(other);
   }
   /**
@@ -308,13 +308,13 @@ class S21Matrix {
    * @param other The matrix to take values from with.
    * @return Reference to the matrix values were set to.
    */
-  S21Matrix& operator=(const S21Matrix& other) noexcept;
+  Matrix& operator=(const Matrix& other) noexcept;
   /**
    * @brief Overloading the "+"(add) operator.
    * @param other The matrix to add to the left one.
    * @return Resulting matrix.
    */
-  S21Matrix operator+(const S21Matrix& other) const {
+  Matrix operator+(const Matrix& other) const {
     return matrixSumSub(other, SumSub::Sum);
   }
   /**
@@ -322,7 +322,7 @@ class S21Matrix {
    * @param other The matrix to substract.
    * @return Resulting matrix.
    */
-  S21Matrix operator-(const S21Matrix& other) const {
+  Matrix operator-(const Matrix& other) const {
     return matrixSumSub(other, SumSub::Sub);
   }
   /**
@@ -330,7 +330,7 @@ class S21Matrix {
    * @param other The matrix to add.
    * @return Resulting matrix reference.
    */
-  S21Matrix& operator+=(const S21Matrix& other) {
+  Matrix& operator+=(const Matrix& other) {
     this->SumMatrix(other);
     return *this;
   }
@@ -339,7 +339,7 @@ class S21Matrix {
    * @param other The matrix to substract.
    * @return Resulting matrix reference.
    */
-  S21Matrix& operator-=(const S21Matrix& other) {
+  Matrix& operator-=(const Matrix& other) {
     this->SubMatrix(other);
     return *this;
   }
@@ -348,20 +348,20 @@ class S21Matrix {
    * @param other The matrix to multiply by.
    * @return Resulting matrix.
    */
-  S21Matrix operator*(const S21Matrix& other) const;
+  Matrix operator*(const Matrix& other) const;
   /**
    * @brief Overloading the "*"(multiplication) by a number operator.
    * @param other The number to multiply by.
    * @return Resulting matrix.
    */
-  S21Matrix operator*(const double num) const;
+  Matrix operator*(const double num) const;
   /**
    * @brief Overloading the "*="(multiplication assignment) by a matrix
    * operator.
    * @param other The matrix to multiply by.
    * @return Resulting matrix reference.
    */
-  S21Matrix& operator*=(const S21Matrix& other) {
+  Matrix& operator*=(const Matrix& other) {
     this->MulMatrix(other);
     return *this;
   }
@@ -371,7 +371,7 @@ class S21Matrix {
    * @param other The number to multiply by.
    * @return Resulting matrix reference.
    */
-  S21Matrix& operator*=(const double other) {
+  Matrix& operator*=(const double other) {
     this->MulNumber(other);
     return *this;
   }

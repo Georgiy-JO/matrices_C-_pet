@@ -1,15 +1,15 @@
-#include "s21_matrix_oop.hpp"
+#include "matrix_cpp.hpp"
 
 #include "matrix_exceptions.hpp"
 
-S21Matrix::S21Matrix(const int rows, const int cols) {
+Matrix::Matrix(const int rows, const int cols) {
   if (rows <= 0 || cols <= 0) throw DimentionError();
   rows_ = rows;
   cols_ = cols;
   allocateMatrix();
 }
 
-void S21Matrix::allocateMatrix() {
+void Matrix::allocateMatrix() {
   matrix_ = new double*[rows_];
   if (!matrix_) throw MemoryAllocationError();
 
@@ -22,7 +22,7 @@ void S21Matrix::allocateMatrix() {
   }
 }
 
-void S21Matrix::freeMatrixPart(const int n) noexcept {
+void Matrix::freeMatrixPart(const int n) noexcept {
   if (matrix_) {
     for (int i = 0; i < n; i++) delete[] matrix_[i];
     delete[] matrix_;
@@ -30,13 +30,13 @@ void S21Matrix::freeMatrixPart(const int n) noexcept {
   }
 }
 
-S21Matrix::~S21Matrix() noexcept {
+Matrix::~Matrix() noexcept {
   freeMatrix();
   setNullMatrix();
 }
 
-S21Matrix::S21Matrix(const S21Matrix& other) noexcept
-    : S21Matrix(other.rows_, other.cols_) {
+Matrix::Matrix(const Matrix& other) noexcept
+    : Matrix(other.rows_, other.cols_) {
   for (int i = 0; i < rows_; ++i) {
     for (int j = 0; j < cols_; ++j) {
       this->matrix_[i][j] = other.matrix_[i][j];
@@ -44,13 +44,13 @@ S21Matrix::S21Matrix(const S21Matrix& other) noexcept
   }
 }
 
-double S21Matrix::getElement(const int row, const int col) const {
+double Matrix::getElement(const int row, const int col) const {
   if (row >= rows_ || col >= cols_ || row < 0 || col < 0)
     throw OutOfRangeError();
   return matrix_[row][col];
 }
 
-void S21Matrix::setElement(const int row, const int col, const double value) {
+void Matrix::setElement(const int row, const int col, const double value) {
   if (row >= rows_ || col >= cols_ || row < 0 || col < 0)
     throw OutOfRangeError();
   if (!matrix_) throw MatrixSetError();
@@ -58,7 +58,7 @@ void S21Matrix::setElement(const int row, const int col, const double value) {
   matrix_[row][col] = value;
 }
 
-void S21Matrix::setMatrix(const int n, const double array[]) {
+void Matrix::setMatrix(const int n, const double array[]) {
   if (!matrix_) throw MatrixSetError();
   if (n < 0 || !array) throw InputError();
   if (n > rows_ * cols_) throw OutOfRangeError();
@@ -74,7 +74,7 @@ void S21Matrix::setMatrix(const int n, const double array[]) {
   }
 }
 
-std::unique_ptr<double[]> S21Matrix::getArrayFromMatrix() const {
+std::unique_ptr<double[]> Matrix::getArrayFromMatrix() const {
   if (!matrix_) throw MatrixSetError();
   std::unique_ptr<double[]> array{std::make_unique<double[]>(rows_ * cols_)};
   for (int i = 0, k = 0; i < rows_; i++) {
@@ -85,11 +85,11 @@ std::unique_ptr<double[]> S21Matrix::getArrayFromMatrix() const {
   return array;
 }
 
-void S21Matrix::setDimentions(const int rows, const int columns) {
+void Matrix::setDimentions(const int rows, const int columns) {
   if (rows < rows_ || columns < cols_)
     throw OutOfRangeError();
   else if (rows > rows_ || columns > cols_) {
-    S21Matrix matrix2(rows, columns);
+    Matrix matrix2(rows, columns);
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < columns; j++) {
         if (i < this->rows_ && j < this->cols_)
@@ -102,7 +102,7 @@ void S21Matrix::setDimentions(const int rows, const int columns) {
   }
 }
 
-bool S21Matrix::EqMatrix(const S21Matrix& other) const {
+bool Matrix::EqMatrix(const Matrix& other) const {
   bool output = matrixDimentionEq(other);
   for (int i = 0; output && i < rows_; i++) {
     for (int j = 0; output && j < cols_; j++) {
@@ -113,20 +113,20 @@ bool S21Matrix::EqMatrix(const S21Matrix& other) const {
   return output;
 }
 
-bool S21Matrix::matrixDimentionEq(const S21Matrix& other) const {
+bool Matrix::matrixDimentionEq(const Matrix& other) const {
   if (!matrix_ || !other.matrix_) throw MatrixSetError();
   return ((rows_ == other.rows_) && (cols_ == other.cols_));
 }
 
-void S21Matrix::setNullMatrix() noexcept {
+void Matrix::setNullMatrix() noexcept {
   rows_ = 0;
   cols_ = 0;
   matrix_ = nullptr;
 }
 
-S21Matrix& S21Matrix::operator=(const S21Matrix& other) noexcept {
+Matrix& Matrix::operator=(const Matrix& other) noexcept {
   if (this != &other) {
-    this->~S21Matrix();
+    this->~Matrix();
     this->setDimentions(other.rows_, other.cols_);
     for (int i = 0; i < rows_; i++) {
       for (int j = 0; j < cols_; j++) {
@@ -137,17 +137,17 @@ S21Matrix& S21Matrix::operator=(const S21Matrix& other) noexcept {
   return *this;
 }
 
-void S21Matrix::replaceMatrix(S21Matrix& other) noexcept {
-  this->~S21Matrix();
+void Matrix::replaceMatrix(Matrix& other) noexcept {
+  this->~Matrix();
   this->rows_ = other.rows_;
   this->cols_ = other.cols_;
   this->matrix_ = other.matrix_;
   other.setNullMatrix();
 }
 
-S21Matrix S21Matrix::matrixSumSub(const S21Matrix& other,
+Matrix Matrix::matrixSumSub(const Matrix& other,
                                   SumSub mod) const {  // check??
-  S21Matrix result;
+  Matrix result;
   if (!matrixDimentionEq(other)) throw DimentionEqualityError();
   result.setDimentions(this->rows_, this->cols_);
   for (int i = 0; i < rows_; i++) {
@@ -168,10 +168,10 @@ S21Matrix S21Matrix::matrixSumSub(const S21Matrix& other,
   return result;
 }
 
-S21Matrix S21Matrix::operator*(const double num) const {
+Matrix Matrix::operator*(const double num) const {
   if (!matrix_) throw MatrixSetError();
   MatrixService::doubleLegit(num);
-  S21Matrix result = *this;
+  Matrix result = *this;
   for (int i = 0; i < result.rows_; i++) {
     for (int j = 0; j < result.cols_; j++) {
       MatrixService::doubleLegit(result.matrix_[i][j]);
@@ -181,10 +181,10 @@ S21Matrix S21Matrix::operator*(const double num) const {
   return result;
 }
 
-S21Matrix S21Matrix::operator*(const S21Matrix& other) const {
+Matrix Matrix::operator*(const Matrix& other) const {
   if (!matrix_ || !other.matrix_) throw MatrixSetError();
   if (cols_ != other.rows_) throw DimentionAlignmentError();
-  S21Matrix result(rows_, other.cols_);
+  Matrix result(rows_, other.cols_);
   for (int i = 0; i < result.rows_; i++) {
     for (int j = 0; j < result.cols_; j++) {
       result.matrix_[i][j] = 0;
@@ -199,8 +199,8 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const {
 }
 
 // template <typename T>       //sad
-// S21Matrix& S21Matrix::operator*=(const T& other){
-//     std::variant< double, S21Matrix> v{other};
+// Matrix& Matrix::operator*=(const T& other){
+//     std::variant< double, Matrix> v{other};
 //     switch (v.index()) {
 //         case 0: this->MulNumber(other); break;
 //         case 1: this->MulMatrix(other); break;
@@ -209,7 +209,7 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) const {
 //     return *this;
 // }
 
-S21Matrix::MatrixElement S21Matrix::operator()(const int row,
+Matrix::MatrixElement Matrix::operator()(const int row,
                                                const int col) const {
   if (!matrix_) throw MatrixSetError();
   if (row < 0 || col < 0 || row >= rows_ || col >= cols_)
@@ -217,14 +217,14 @@ S21Matrix::MatrixElement S21Matrix::operator()(const int row,
   return MatrixElement(*this, row, col);
 }
 
-double S21Matrix::MatrixElement::operator=(const double input) { 
+double Matrix::MatrixElement::operator=(const double input) { 
   if (!ptr) throw MatrixSetError();
   MatrixService::doubleLegit(input);
   *ptr = input;
   return input;
 }
 
-void S21Matrix::print_matrix() const noexcept {
+void Matrix::print_matrix() const noexcept {
   using std::cout, std::endl;
   if (!matrix_)
     cout << nullptr << endl;
@@ -236,9 +236,9 @@ void S21Matrix::print_matrix() const noexcept {
   }
 }
 
-S21Matrix S21Matrix::Transpose() const {
+Matrix Matrix::Transpose() const {
   if (!matrix_) throw MatrixSetError();
-  S21Matrix new_matrix(cols_, rows_);
+  Matrix new_matrix(cols_, rows_);
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
       new_matrix.matrix_[j][i] = matrix_[i][j];
@@ -247,7 +247,7 @@ S21Matrix S21Matrix::Transpose() const {
   return new_matrix;
 }
 
-double S21Matrix::Determinant() const {
+double Matrix::Determinant() const {
   if (!matrix_) throw MatrixSetError();
   if (rows_ != cols_) throw SquarenessError();
   double det = 0;
@@ -262,7 +262,7 @@ double S21Matrix::Determinant() const {
   return det;
 }
 
-S21Matrix S21Matrix::minorMaker(const int row, const int col) const {
+Matrix Matrix::minorMaker(const int row, const int col) const {
   if (!matrix_) throw MatrixSetError();
   if (row < 0 || col < 0 || row >= rows_ || col >= cols_ || rows_ == 1 ||
       cols_ == 1)
@@ -274,13 +274,13 @@ S21Matrix S21Matrix::minorMaker(const int row, const int col) const {
       if (i != row && j != col) ar[k++] = matrix_[i][j];
     }
   }
-  return S21Matrix(rows_ - 1, cols_ - 1, n, ar);
+  return Matrix(rows_ - 1, cols_ - 1, n, ar);
 }
 
-S21Matrix S21Matrix::CalcComplements() const {
+Matrix Matrix::CalcComplements() const {
   if (!matrix_) throw MatrixSetError();
   if (rows_ != cols_) throw SquarenessError();
-  S21Matrix new_matrix(rows_, cols_);
+  Matrix new_matrix(rows_, cols_);
   if (rows_ == 1)
     new_matrix(0, 0) = 1;
   else {
@@ -293,7 +293,7 @@ S21Matrix S21Matrix::CalcComplements() const {
   return new_matrix;
 }
 
-S21Matrix S21Matrix::InverseMatrix() const {
+Matrix Matrix::InverseMatrix() const {
   double inverse_determinamt = Determinant();
   if (inverse_determinamt == 0) throw NonInvertibleError();
   inverse_determinamt = 1.0 / inverse_determinamt;
